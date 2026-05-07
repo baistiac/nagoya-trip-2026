@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-    
     <script>
         tailwind.config = {
             theme: {
@@ -31,7 +30,7 @@
 <body class="text-gray-800 antialiased h-screen flex flex-col">
 
 <div id="app" class="h-full flex flex-col max-w-md mx-auto bg-white shadow-xl overflow-hidden relative">
-    
+
     <header class="w-full h-[250px] bg-cover bg-center relative shrink-0" style="background-image: url('banner.jpg'); background-color: #A2D2FF;">
         <div class="absolute bottom-10 right-4 flex space-x-3 bg-white/30 backdrop-blur-md p-2 rounded-2xl shadow-sm z-20">
             <button @click="currentTab = 'itinerary'" :class="{'text-navy-blue scale-110': currentTab === 'itinerary', 'text-gray-600': currentTab !== 'itinerary'}" class="p-2 transition-transform">
@@ -50,7 +49,7 @@
     </header>
 
     <main class="flex-1 bg-snow-bg -mt-6 rounded-t-[30px] z-10 p-5 overflow-y-auto no-scrollbar relative shadow-[0_-5px_15px_rgba(0,0,0,0.05)]">
-        
+
         <div v-show="currentTab === 'itinerary'" class="pb-20">
             <div class="flex overflow-x-auto no-scrollbar space-x-4 pb-4 border-b border-blue-100">
                 <div v-for="(day, index) in tripDays" :key="index" @click="selectedDay = index"
@@ -75,9 +74,12 @@
                 </div>
             </div>
 
+            <div class="mb-3 px-1">
+                <p class="text-base font-bold text-navy-blue">{{ tripDays[selectedDay].theme }}</p>
+            </div>
+
             <div id="itinerary-list" class="space-y-4">
                 <div v-for="(item, idx) in currentDayData" :key="item.id" class="relative group">
-                    
                     <div v-if="idx > 0" class="flex flex-col items-center my-2 text-gray-400">
                         <div class="h-4 border-l-2 border-dashed border-blue-200"></div>
                         <div class="flex items-center space-x-2 text-xs my-1 bg-white px-3 py-1 rounded-full shadow-sm">
@@ -87,7 +89,7 @@
                         <div class="h-4 border-l-2 border-dashed border-blue-200"></div>
                     </div>
                     <div v-if="idx === 0 && selectedDay > 0" class="flex flex-col items-center my-2 text-gray-400">
-                         <div class="flex items-center space-x-2 text-xs my-1 bg-white px-3 py-1 rounded-full shadow-sm">
+                        <div class="flex items-center space-x-2 text-xs my-1 bg-white px-3 py-1 rounded-full shadow-sm">
                             <i class="fa-solid fa-hotel"></i>
                             <i class="fa-solid fa-arrow-right mx-1"></i>
                             <i :class="getTransportIcon('subway')"></i>
@@ -96,18 +98,19 @@
                         <div class="h-4 border-l-2 border-dashed border-blue-200"></div>
                     </div>
 
-                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-blue-50 cursor-move" :class="{'border-l-4 border-l-orange-400': item.type === 'flight', 'border-l-4 border-l-navy-blue': item.type !== 'flight'}">
+                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-blue-50 cursor-move"
+                         :class="{'border-l-4 border-l-orange-400': item.type === 'flight', 'border-l-4 border-l-navy-blue': item.type !== 'flight'}">
                         <div class="flex justify-between items-start">
                             <div class="flex-1" @click="openGoogleMaps(item.name)">
                                 <div class="flex items-center space-x-2 mb-1">
                                     <span class="text-xs px-2 py-0.5 rounded bg-ice-blue text-navy-blue">{{ item.category }}</span>
-                                    <h3 class="font-bold text-gray-800 text-lg">{{ item.name }}</h3>
+                                    <h3 class="font-bold text-gray-800 text-base leading-snug">{{ item.name }}</h3>
                                 </div>
                                 <p v-if="item.time" class="text-xs text-gray-500 mt-1"><i class="fa-regular fa-clock mr-1"></i>{{ item.time }}</p>
                                 <p v-if="item.ticket" class="text-xs text-gray-500 mt-1"><i class="fa-solid fa-ticket mr-1"></i>{{ item.ticket }}</p>
-                                <p v-if="item.note" class="text-xs text-gray-600 mt-2 bg-gray-50 p-2 rounded">{{ item.note }}</p>
+                                <p v-if="item.note" class="text-xs text-gray-600 mt-2 bg-gray-50 p-2 rounded leading-relaxed">{{ item.note }}</p>
                             </div>
-                            <button @click="editItem(item)" class="text-gray-300 p-2 hover:text-navy-blue"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button @click="editItem(item)" class="text-gray-300 p-2 hover:text-navy-blue shrink-0"><i class="fa-solid fa-pen-to-square"></i></button>
                         </div>
                     </div>
                 </div>
@@ -116,7 +119,7 @@
 
         <div v-show="currentTab === 'info'" class="pb-20 space-y-5">
             <h2 class="text-xl font-bold text-navy-blue border-b-2 border-ice-blue pb-2">旅行資訊</h2>
-            
+
             <div class="bg-white p-4 rounded-2xl shadow-sm border border-blue-50">
                 <h3 class="font-bold mb-3 text-sm text-gray-500"><i class="fa-solid fa-coins mr-2"></i>即時匯率換算</h3>
                 <div class="flex items-center space-x-3">
@@ -137,39 +140,27 @@
                 <div class="mb-4">
                     <span class="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded mb-2 inline-block">去程 IT778</span>
                     <div class="flex justify-between items-center text-center">
-                        <div>
-                            <p class="text-2xl font-bold">17:05</p>
-                            <p class="text-xs text-gray-500">RMQ</p>
-                        </div>
+                        <div><p class="text-2xl font-bold">17:05</p><p class="text-xs text-gray-500">RMQ</p></div>
                         <div class="flex-1 px-4 text-gray-300">
                             <p class="text-[10px] text-gray-400">約 2h 50m</p>
                             <div class="border-t-2 border-dashed border-gray-300 my-1 relative">
                                 <i class="fa-solid fa-plane absolute top-[-10px] right-1/2 translate-x-1/2"></i>
                             </div>
                         </div>
-                        <div>
-                            <p class="text-2xl font-bold">20:55</p>
-                            <p class="text-xs text-gray-500">NGO</p>
-                        </div>
+                        <div><p class="text-2xl font-bold">20:55</p><p class="text-xs text-gray-500">NGO</p></div>
                     </div>
                 </div>
                 <div>
                     <span class="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded mb-2 inline-block">回程 IT779</span>
                     <div class="flex justify-between items-center text-center">
-                        <div>
-                            <p class="text-2xl font-bold">13:45</p>
-                            <p class="text-xs text-gray-500">NGO</p>
-                        </div>
+                        <div><p class="text-2xl font-bold">13:45</p><p class="text-xs text-gray-500">NGO</p></div>
                         <div class="flex-1 px-4 text-gray-300">
                             <p class="text-[10px] text-gray-400">約 3h 20m</p>
                             <div class="border-t-2 border-dashed border-gray-300 my-1 relative">
                                 <i class="fa-solid fa-plane absolute top-[-10px] right-1/2 translate-x-1/2"></i>
                             </div>
                         </div>
-                        <div>
-                            <p class="text-2xl font-bold">16:05</p>
-                            <p class="text-xs text-gray-500">RMQ</p>
-                        </div>
+                        <div><p class="text-2xl font-bold">16:05</p><p class="text-xs text-gray-500">RMQ</p></div>
                     </div>
                 </div>
             </div>
@@ -182,10 +173,19 @@
                     <p><i class="fa-solid fa-location-dot w-5 text-center text-gray-400"></i> 愛知縣名古屋市中區榮3丁目17-25</p>
                     <p><i class="fa-solid fa-phone w-5 text-center text-gray-400"></i> +81 52-243-3111</p>
                 </div>
-                <button @click="openGoogleMaps('FORZA Hotel Nagoya Sakae')" class="mt-4 w-full bg-ice-blue text-navy-blue py-2 rounded-lg font-bold text-sm">
-                    開啟導航
-                </button>
+                <button @click="openGoogleMaps('FORZA Hotel Nagoya Sakae')" class="mt-4 w-full bg-ice-blue text-navy-blue py-2 rounded-lg font-bold text-sm">開啟導航</button>
             </div>
+
+            <div class="bg-amber-50 p-4 rounded-2xl shadow-sm border border-amber-100">
+                <h3 class="font-bold mb-3 text-sm text-amber-600"><i class="fa-solid fa-lightbulb mr-2"></i>專業叮嚀</h3>
+                <ul class="space-y-2 text-xs text-gray-700">
+                    <li><i class="fa-solid fa-mobile-screen-button text-amber-400 mr-2"></i>Visit Japan Web 先安裝 QR Code，通關更快速</li>
+                    <li><i class="fa-solid fa-passport text-amber-400 mr-2"></i>退稅記得帶護照正本（UNIQLO / GU / MUJI）</li>
+                    <li><i class="fa-solid fa-credit-card text-amber-400 mr-2"></i>手機綁定 Suica / PASMO，地鐵與超商都超方便</li>
+                    <li><i class="fa-solid fa-suitcase text-amber-400 mr-2"></i>行李箱空間預留 20kg 託運額度！</li>
+                </ul>
+            </div>
+
             <div class="bg-red-50 p-4 rounded-2xl shadow-sm border border-red-100">
                 <h3 class="font-bold mb-2 text-sm text-red-500"><i class="fa-solid fa-truck-medical mr-2"></i>緊急聯絡</h3>
                 <div class="flex justify-between text-sm">
@@ -198,10 +198,11 @@
         <div v-show="currentTab === 'shopping'" class="pb-20">
             <h2 class="text-xl font-bold text-navy-blue border-b-2 border-ice-blue pb-2 mb-4">必買清單</h2>
             <div class="grid grid-cols-2 gap-3">
-                <div v-for="item in shoppingList" :key="item.id" class="bg-white rounded-xl overflow-hidden shadow-sm border border-blue-50 relative group">
+                <div v-for="item in shoppingList" :key="item.id" class="bg-white rounded-xl overflow-hidden shadow-sm border border-blue-50">
                     <img :src="item.image" class="w-full h-24 object-cover" alt="商品圖片">
                     <div class="p-2">
                         <p class="text-sm font-bold truncate">{{ item.name }}</p>
+                        <p class="text-xs text-gray-400">{{ item.where }}</p>
                     </div>
                 </div>
             </div>
@@ -212,7 +213,6 @@
                 <p class="text-sm text-blue-200">旅途總花費</p>
                 <p class="text-3xl font-bold mt-1">¥ {{ totalExpense.toLocaleString() }}</p>
             </div>
-
             <div class="space-y-3">
                 <div v-for="exp in expenses" :key="exp.id" class="bg-white p-3 rounded-xl shadow-sm flex items-center justify-between">
                     <div class="flex items-center space-x-3">
@@ -224,9 +224,7 @@
                             <p class="text-xs text-gray-400">{{ exp.date }} • {{ exp.payment }}</p>
                         </div>
                     </div>
-                    <div class="font-bold text-navy-blue">
-                        ¥ {{ exp.amount.toLocaleString() }}
-                    </div>
+                    <div class="font-bold text-navy-blue">¥ {{ exp.amount.toLocaleString() }}</div>
                 </div>
             </div>
         </div>
@@ -234,13 +232,11 @@
         <button v-show="currentTab !== 'info'" @click="openModal()" class="fixed bottom-6 right-6 w-14 h-14 bg-navy-blue text-white rounded-full shadow-lg flex items-center justify-center text-2xl hover:scale-105 transition-transform z-30">
             <i class="fa-solid fa-plus"></i>
         </button>
-
     </main>
 </div>
 
 <script>
     const { createApp } = Vue;
-
     createApp({
         data() {
             return {
@@ -248,91 +244,122 @@
                 selectedDay: 0,
                 calcJpy: '',
                 tripDays: [
-                    { date: '10', weekday: 'Wed' },
-                    { date: '11', weekday: 'Thu' },
-                    { date: '12', weekday: 'Fri' },
-                    { date: '13', weekday: 'Sat' },
-                    { date: '14', weekday: 'Sun' },
-                    { date: '15', weekday: 'Mon' }
+                    { date: '10', weekday: 'Wed', theme: '✈️ Day 1 — 降落名古屋，深夜入城補給' },
+                    { date: '11', weekday: 'Thu', theme: '🏯 Day 2 — 工業文明、歷史名城與香氛美學' },
+                    { date: '12', weekday: 'Fri', theme: '🛍️ Day 3 — 文藝老街與平價服飾旗艦店' },
+                    { date: '13', weekday: 'Sat', theme: '🐬 Day 4 — 深海藍色療癒與極地機械' },
+                    { date: '14', weekday: 'Sun', theme: '🌲 Day 5 — 神宮淨化與終極掃貨之旅' },
+                    { date: '15', weekday: 'Mon', theme: '🛫 Day 6 — 機場巡禮與返台' }
                 ],
                 itineraryData: [
+                    // Day 1 — 6/10
                     [
-                        { id: 1, type: 'flight', category: '航班', name: '虎航 IT778 (抵達 NGO)', time: '20:55 降落', note: '領取行李後轉乘名鐵', transport: 'train', transitTime: 45 },
-                        { id: 2, type: 'hotel', category: '住宿', name: '榮弗爾札飯店 Check-in', time: '23:25', note: '放行李', transport: 'walk', transitTime: 10 },
-                        { id: 3, type: 'shopping', category: '購物', name: '唐吉訶德 榮店', time: '23:50', note: '買零食飲料，24小時營業', transport: 'walk', transitTime: 5 }
+                        { id: 101, type: 'flight',    category: '航班', name: '虎航 IT778 降落 NGO', time: '20:55', note: '先在手機準備好 Visit Japan Web QR Code，通關更快', transport: 'walk', transitTime: 5 },
+                        { id: 102, type: 'transport', category: '通關', name: '領取行李 & 通關', time: '21:10 - 22:00', note: '預計 21:50 左右領完行李並完成海關檢查', transport: 'walk', transitTime: 15 },
+                        { id: 103, type: 'transport', category: '交通', name: '名鐵 μ-SKY 機場特急', time: '22:15 - 23:10', note: '名鐵名古屋站下車，轉地鐵東山線/名城線至榮站', transport: 'train', transitTime: 15 },
+                        { id: 104, type: 'hotel',     category: '住宿', name: '名古屋榮弗爾札飯店 Check-in', time: '23:25', note: '放好行李，輕裝出發', transport: 'walk', transitTime: 5 },
+                        { id: 105, type: 'shopping',  category: '購物', name: '唐吉訶德 榮店', time: '23:50', ticket: '24小時營業', note: '買保養品、宵夜、休足時間。深夜人潮少，逛起來反而舒服！', transport: 'walk', transitTime: 5 }
                     ],
+                    // Day 2 — 6/11
                     [
-                        { id: 4, type: 'food', category: '美食', name: 'コメダ珈琲店', time: '09:00 - 10:00', note: '點飲料送吐司', transport: 'walk', transitTime: 10 },
-                        { id: 5, type: 'attraction', category: '景點', name: '名古屋城', ticket: '門票 ¥500', note: '參觀本丸御殿', transport: 'subway', transitTime: 20 },
-                        { id: 6, type: 'attraction', category: '景點', name: 'TOYOTA 產業技術紀念館', note: '工業機械運作', transport: 'bus', transitTime: 25 },
-                        { id: 7, type: 'shopping', category: '購物', name: '無印良品 (買精油)', transport: 'subway', transitTime: 15 }
+                        { id: 201, type: 'food',       category: '早餐', name: 'コメダ珈琲店 榮中心公園店', time: '09:00', note: '點飲料送紅豆泥吐司，享受悠閒的 Morning Service', transport: 'subway', transitTime: 10 },
+                        { id: 202, type: 'attraction', category: '景點', name: '名古屋城', time: '10:30', ticket: '門票 ¥500', note: '重點參觀「本丸御殿」，金箔壁畫與精密木構造是日本建築工藝巔峰', transport: 'subway', transitTime: 25 },
+                        { id: 203, type: 'food',       category: '午餐', name: '金魚池橫丁 — 味噌烏龍麵', time: '13:00', note: '古樸商店街內享用名古屋紅味噌烏龍麵', transport: 'bus', transitTime: 20 },
+                        { id: 204, type: 'attraction', category: '景點', name: 'TOYOTA 產業技術紀念館', time: '14:30', ticket: '門票 ¥500', note: '從紡織機械到汽車組裝線，大型機具現場運作，工業自動化與製程演進一覽無遺', transport: 'subway', transitTime: 30 },
+                        { id: 205, type: 'shopping',   category: '購物', name: '無印良品 MUJI 榮店', time: '17:00', note: '超音波芬香噴霧器、單方精油系列非常齊全，適合挑選幾款舒壓', transport: 'subway', transitTime: 15 },
+                        { id: 206, type: 'food',       category: '晚餐', name: '熱田蓬萊軒（松坂屋店）— 鰻魚飯三吃', time: '19:00', note: '傳說中的ひつまぶし，建議提前預約', transport: 'walk', transitTime: 10 },
+                        { id: 207, type: 'attraction', category: '夜景', name: '中部電力 MIRAI TOWER 觀景台', time: '20:30', ticket: '觀景台 ¥700', note: '俯瞰榮區璀璨夜間街景，拍照打卡必備', transport: 'walk', transitTime: 5 }
+                    ],
+                    // Day 3 — 6/12
+                    [
+                        { id: 301, type: 'food',       category: '早餐', name: 'コンパル 榮地下街店 — 炸蝦三明治', time: '09:00', note: '名古屋人氣早餐，炸蝦三明治是招牌必點', transport: 'subway', transitTime: 15 },
+                        { id: 302, type: 'attraction', category: '景點', name: '大須觀音 & 大須商店街', time: '10:30', note: '參拜壯麗觀音寺後逛大須商店街，懷舊老舖與電子零件共存，非常多元', transport: 'subway', transitTime: 15 },
+                        { id: 303, type: 'food',       category: '午餐', name: '大須小吃巡禮', time: '13:00', note: '鯛魚燒、烤糰子、拿坡里披薩，邊走邊吃！', transport: 'walk', transitTime: 5 },
+                        { id: 304, type: 'shopping',   category: '購物', name: '3COINS 大須店', time: '15:00', note: '設計精美且具備生活智慧的小雜貨，¥330 起', transport: 'walk', transitTime: 5 },
+                        { id: 305, type: 'shopping',   category: '購物', name: 'UNIQLO & GU 榮 SKYLE 店', time: '16:30', note: '5F 是 UNIQLO、6F 是 GU，兩家連著逛最有效率，記得帶護照退稅！', transport: 'subway', transitTime: 20 },
+                        { id: 306, type: 'food',       category: '晚餐', name: '矢場炸豬排 榮 CentRise 店', time: '19:30', note: '名古屋最強紅味噌豬排，外酥內嫩，沾上甜辣味噌醬絕配', transport: 'walk', transitTime: 10 }
+                    ],
+                    // Day 4 — 6/13
+                    [
+                        { id: 401, type: 'food',       category: '早餐', name: 'Bucyo Coffee — 小倉紅豆泥吐司', time: '08:30', note: '濃郁小倉紅豆泥配特製鮮奶油吐司，名古屋早餐文化精髓', transport: 'subway', transitTime: 20 },
+                        { id: 402, type: 'transport',  category: '交通', name: '購買「土日環保券」', time: '09:30', ticket: '土日環保券 ¥740', note: '週末限定，地鐵全線一日自由乘坐，名城線直通名港線至名古屋港', transport: 'subway', transitTime: 30 },
+                        { id: 403, type: 'attraction', category: '景點', name: '名古屋港水族館', time: '10:15', ticket: '門票 ¥2,030', note: '北館：虎鯨、白鯨表演水槽；南館：震撼沙丁魚龍捲風，南極之旅企鵝展示', transport: 'walk', transitTime: 5 },
+                        { id: 404, type: 'attraction', category: '景點', name: '南極觀測船 富士號', time: '14:30', ticket: '含水族館套票', note: '退役破冰船，保留精密航行設備、引擎室與極地維生系統，工程控必看', transport: 'walk', transitTime: 10 },
+                        { id: 405, type: 'shopping',   category: '購物', name: '返回榮區 — 最後補刀', time: '16:30', note: '藥妝或百貨掃尾，想買的東西趁今晚補齊', transport: 'subway', transitTime: 30 },
+                        { id: 406, type: 'food',       category: '晚餐', name: '鳥開總本家 — 名古屋交趾雞串燒 & 親子丼', time: '19:00', note: '得獎無數的名古屋交趾雞，串燒與親子丼都是必點', transport: 'walk', transitTime: 10 }
+                    ],
+                    // Day 5 — 6/14
+                    [
+                        { id: 501, type: 'food',       category: '早餐', name: 'Coffee House Kako 花車本店', time: '09:00', note: '著名手工果醬配紅豆泥吐司，昭和氛圍滿滿的老咖啡館', transport: 'subway', transitTime: 20 },
+                        { id: 502, type: 'attraction', category: '景點', name: '熱田神宮', time: '11:00', note: '漫步千年神木森林參道，感受莊嚴肅穆的氛圍，免費入場', transport: 'subway', transitTime: 10 },
+                        { id: 503, type: 'food',       category: '午餐', name: '宮棊子麵 Kishimen — 神宮周邊', time: '13:00', note: '口感扁平且滑順的名古屋傳統麵食，在地人最愛的神宮名物', transport: 'subway', transitTime: 30 },
+                        { id: 504, type: 'shopping',   category: '購物', name: '無印良品 名鐵百貨店（中部最大）', time: '15:00', note: '名古屋車站旁，中部地區最大規模 MUJI，品項極多，適合深度採購', transport: 'walk', transitTime: 10 },
+                        { id: 505, type: 'hotel',      category: '整理', name: '行李大閱兵！', time: '17:30', note: '拿出所有戰利品總整理。用 MUJI 收納袋分層裝箱，確保 20kg 重量均勻分配', transport: 'walk', transitTime: 5 },
+                        { id: 506, type: 'food',       category: '晚餐', name: '飛驒牛燒肉 — 最後晚餐', time: '19:30', note: '入口即化的和牛犒賞這幾天的辛勞，值得！', transport: 'walk', transitTime: 10 }
+                    ],
+                    // Day 6 — 6/15
+                    [
+                        { id: 601, type: 'food',       category: '早餐', name: '飯店周邊喫茶店', time: '08:30', note: '睡飽一點，選一家充滿昭和氛圍的小咖啡店，享受最後的 Morning Service', transport: 'subway', transitTime: 15 },
+                        { id: 602, type: 'transport',  category: '交通', name: '地鐵 → 名古屋站 → 名鐵特急 → 機場', time: '10:30', note: '搭地鐵至名古屋站，轉名鐵機場特急 μ-SKY 前往中部國際機場', transport: 'train', transitTime: 45 },
+                        { id: 603, type: 'shopping',   category: '伴手禮', name: 'えびせんべいの里 — 蝦餅', time: '11:30', note: '機場 4 樓，最受歡迎的伴手禮！多買幾盒給同事', transport: 'walk', transitTime: 60 },
+                        { id: 604, type: 'flight',     category: '航班', name: '虎航 IT779 起飛 → 台中', time: '13:45', note: '預計 16:05 抵達台中清泉崗機場，滿載而歸！', transport: 'walk', transitTime: 0 }
                     ]
                 ],
                 shoppingList: [
-                    { id: 1, name: 'えびせんべいの里 蝦餅', image: 'https://images.unsplash.com/photo-1599598425947-3300262b66bf?auto=format&fit=crop&w=200&q=80' },
-                    { id: 2, name: '無印良品 單方精油', image: 'https://images.unsplash.com/photo-1608528577891-eb055944f2e7?auto=format&fit=crop&w=200&q=80' }
+                    { id: 1, name: 'えびせんべいの里 蝦餅',    where: '中部國際機場 4F',    image: 'https://images.unsplash.com/photo-1599598425947-3300262b66bf?auto=format&fit=crop&w=200&q=80' },
+                    { id: 2, name: '無印良品 單方精油',        where: 'MUJI 榮店 / 名鐵百貨', image: 'https://images.unsplash.com/photo-1608528577891-eb055944f2e7?auto=format&fit=crop&w=200&q=80' },
+                    { id: 3, name: '矢場味噌 紅味噌',          where: '矢場豬排店 / 超市',    image: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=200&q=80' },
+                    { id: 4, name: 'UNIQLO 科技感衣物',        where: 'UNIQLO 榮 SKYLE 5F',   image: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=200&q=80' },
+                    { id: 5, name: 'GU 當季服飾',              where: 'GU 榮 SKYLE 6F',       image: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=200&q=80' },
+                    { id: 6, name: '3COINS 生活雜貨',          where: '3COINS 大須店',        image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=200&q=80' }
                 ],
                 expenses: [
-                    { id: 1, category: '交通', name: '名鐵特急', date: '6/10', payment: '現金', amount: 1250 },
-                    { id: 2, category: '購物', name: '唐吉訶德', date: '6/10', payment: '信用卡', amount: 4500 }
+                    { id: 1, category: '交通', name: '名鐵 μ-SKY 機場特急',   date: '6/10', payment: 'Suica',  amount: 1250 },
+                    { id: 2, category: '購物', name: '唐吉訶德 榮店',           date: '6/10', payment: '信用卡', amount: 4500 },
+                    { id: 3, category: '門票', name: '名古屋城',                date: '6/11', payment: '現金',   amount: 500  },
+                    { id: 4, category: '門票', name: 'TOYOTA 產業技術紀念館',   date: '6/11', payment: '現金',   amount: 500  },
+                    { id: 5, category: '飲食', name: '熱田蓬萊軒 鰻魚飯三吃',  date: '6/11', payment: '信用卡', amount: 4200 },
+                    { id: 6, category: '門票', name: 'MIRAI TOWER 觀景台',     date: '6/11', payment: '現金',   amount: 700  },
+                    { id: 7, category: '飲食', name: '矢場炸豬排',             date: '6/12', payment: '信用卡', amount: 2200 },
+                    { id: 8, category: '交通', name: '土日環保券',              date: '6/13', payment: 'Suica',  amount: 740  },
+                    { id: 9, category: '門票', name: '名古屋港水族館',          date: '6/13', payment: '信用卡', amount: 2030 }
                 ]
             }
         },
         computed: {
-            currentDayData() {
-                return this.itineraryData[this.selectedDay] || [];
-            },
-            totalExpense() {
-                return this.expenses.reduce((sum, exp) => sum + exp.amount, 0);
-            }
+            currentDayData() { return this.itineraryData[this.selectedDay] || []; },
+            totalExpense()    { return this.expenses.reduce((sum, e) => sum + e.amount, 0); }
         },
-        mounted() {
-            if (this.currentTab === 'itinerary') {
-                this.initSortable();
-            }
-        },
+        mounted() { if (this.currentTab === 'itinerary') this.initSortable(); },
         watch: {
-            currentTab(newVal) {
-                if (newVal === 'itinerary') {
-                    setTimeout(() => this.initSortable(), 100);
-                }
-            }
+            currentTab(v) { if (v === 'itinerary') setTimeout(() => this.initSortable(), 100); },
+            selectedDay()  { setTimeout(() => this.initSortable(), 100); }
         },
         methods: {
             initSortable() {
                 const el = document.getElementById('itinerary-list');
-                if (el) {
-                    new Sortable(el, {
-                        animation: 150,
-                        ghostClass: 'opacity-50',
-                        onEnd: (evt) => {
-                            const item = this.itineraryData[this.selectedDay].splice(evt.oldIndex, 1)[0];
-                            this.itineraryData[this.selectedDay].splice(evt.newIndex, 0, item);
-                        }
-                    });
-                }
+                if (el) new Sortable(el, {
+                    animation: 150,
+                    ghostClass: 'opacity-50',
+                    onEnd: (evt) => {
+                        const item = this.itineraryData[this.selectedDay].splice(evt.oldIndex, 1)[0];
+                        this.itineraryData[this.selectedDay].splice(evt.newIndex, 0, item);
+                    }
+                });
             },
             getTransportIcon(type) {
-                const icons = { 'walk': 'fa-solid fa-person-walking', 'car': 'fa-solid fa-car', 'bus': 'fa-solid fa-bus', 'train': 'fa-solid fa-train', 'subway': 'fa-solid fa-train-subway' };
+                const icons = { walk: 'fa-solid fa-person-walking', car: 'fa-solid fa-car', bus: 'fa-solid fa-bus', train: 'fa-solid fa-train', subway: 'fa-solid fa-train-subway' };
                 return icons[type] || 'fa-solid fa-person-walking';
             },
-            getExpenseIcon(category) {
+            getExpenseIcon(cat) {
                 const icons = { '交通': 'fa-solid fa-train', '飲食': 'fa-solid fa-utensils', '住宿': 'fa-solid fa-bed', '門票': 'fa-solid fa-ticket', '購物': 'fa-solid fa-bag-shopping' };
-                return icons[category] || 'fa-solid fa-circle-dollar-to-slot';
+                return icons[cat] || 'fa-solid fa-circle-dollar-to-slot';
             },
-            openGoogleMaps(query) {
-                const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
-                window.open(url, '_blank');
-            },
-            openModal() {
-                alert("此處可串接彈出式表單 (新增行程/購物/花費)！");
-            },
-            editItem(item) {
-                if(confirm(`確定要刪除「${item.name}」嗎？`)) {
-                    this.itineraryData[this.selectedDay] = this.itineraryData[this.selectedDay].filter(i => i.id !== item.id);
-                }
-            }
+            openGoogleMaps(q) { window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`, '_blank'); },
+            openModal()       { alert('此處可串接彈出式表單 (新增行程/購物/花費)！'); },
+            editItem(item)    { if (confirm(`確定要刪除「${item.name}」嗎？`)) this.itineraryData[this.selectedDay] = this.itineraryData[this.selectedDay].filter(i => i.id !== item.id); }
         }
     }).mount('#app')
 </script>
 </body>
+</html>
