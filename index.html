@@ -3,19 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nagoya Trip 2026</title>
+    <title>Nagoya Trip 2026 - Minimalist</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Vue 3 -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'snow-bg': '#F0F8FF',
-                        'ice-blue': '#E0F2FE',
-                        'navy-blue': '#1E3A8A',
+                        'muji-bg': '#FAFAFA',       // 無印風灰白背景
+                        'muji-card': '#FFFFFF',
+                        'muji-text': '#333333',     // 柔和的深灰字體
+                        'muji-red': '#7F0019',      // 無印經典紅 (點綴用)
+                        'muji-gray': '#767676',
+                        'muji-border': '#E5E5E5',
+                        'muji-wood': '#D4B59E'
+                    },
+                    fontFamily: {
+                        'sans': ['"Noto Sans TC"', 'sans-serif'],
+                        'serif': ['"Noto Serif TC"', 'serif'],
+                    },
+                    boxShadow: {
+                        'muji': '0 2px 8px rgba(0, 0, 0, 0.04)',
                     }
                 }
             }
@@ -24,340 +46,468 @@
     <style>
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        body { background-color: #F0F8FF; font-family: 'Helvetica Neue', Helvetica, Arial, 'PingFang TC', '微軟正黑體', sans-serif; }
+        body { background-color: #EFEFEF; }
+        
+        /* 雜誌排版樣式 */
+        .magazine-text { text-align: justify; text-justify: inter-ideograph; line-height: 1.8; }
+        
+        /* Checkbox 樣式調整 */
+        input[type="checkbox"] { accent-color: #7F0019; width: 1.2rem; height: 1.2rem; }
     </style>
 </head>
-<body class="text-gray-800 antialiased h-screen flex flex-col">
+<body class="text-muji-text antialiased h-screen flex flex-col items-center">
 
-<div id="app" class="h-full flex flex-col max-w-md mx-auto bg-white shadow-xl overflow-hidden relative">
-
-    <header class="w-full h-[250px] bg-cover bg-center relative shrink-0" style="background-image: url('banner.jpg'); background-color: #A2D2FF;">
-        <div class="absolute bottom-10 right-4 flex space-x-3 bg-white/30 backdrop-blur-md p-2 rounded-2xl shadow-sm z-20">
-            <button @click="currentTab = 'itinerary'" :class="{'text-navy-blue scale-110': currentTab === 'itinerary', 'text-gray-600': currentTab !== 'itinerary'}" class="p-2 transition-transform">
-                <i class="fa-solid fa-map-location-dot text-xl"></i>
-            </button>
-            <button @click="currentTab = 'info'" :class="{'text-navy-blue scale-110': currentTab === 'info', 'text-gray-600': currentTab !== 'info'}" class="p-2 transition-transform">
-                <i class="fa-solid fa-circle-info text-xl"></i>
-            </button>
-            <button @click="currentTab = 'shopping'" :class="{'text-navy-blue scale-110': currentTab === 'shopping', 'text-gray-600': currentTab !== 'shopping'}" class="p-2 transition-transform">
-                <i class="fa-solid fa-basket-shopping text-xl"></i>
-            </button>
-            <button @click="currentTab = 'expense'" :class="{'text-navy-blue scale-110': currentTab === 'expense', 'text-gray-600': currentTab !== 'expense'}" class="p-2 transition-transform">
-                <i class="fa-solid fa-yen-sign text-xl"></i>
-            </button>
+<div id="app" class="w-full h-full max-w-md bg-muji-bg shadow-2xl flex flex-col relative overflow-hidden">
+    
+    <!-- Header -->
+    <header class="bg-white border-b border-muji-border p-4 shrink-0 flex justify-between items-center z-20">
+        <div>
+            <h1 class="text-xl font-serif font-bold text-muji-text tracking-widest">NAGOYA<span class="text-muji-red">.</span></h1>
+            <p class="text-xs text-muji-gray tracking-wider mt-1">2026 SUMMER TRIP</p>
+        </div>
+        <div class="text-right">
+            <span class="text-xs bg-muji-bg px-2 py-1 rounded border border-muji-border text-muji-gray">v1.0</span>
         </div>
     </header>
 
-    <main class="flex-1 bg-snow-bg -mt-6 rounded-t-[30px] z-10 p-5 overflow-y-auto no-scrollbar relative shadow-[0_-5px_15px_rgba(0,0,0,0.05)]">
-
-        <div v-show="currentTab === 'itinerary'" class="pb-20">
-            <div class="flex overflow-x-auto no-scrollbar space-x-4 pb-4 border-b border-blue-100">
-                <div v-for="(day, index) in tripDays" :key="index" @click="selectedDay = index"
-                     :class="{'bg-navy-blue text-white shadow-md': selectedDay === index, 'bg-white text-gray-400': selectedDay !== index}"
-                     class="flex flex-col items-center justify-center min-w-[60px] h-[70px] rounded-2xl cursor-pointer transition-colors">
-                    <span class="text-sm font-bold">{{ day.weekday }}</span>
-                    <span class="text-xl font-bold">{{ day.date }}</span>
-                </div>
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto no-scrollbar relative p-4 pb-24">
+        
+        <!-- 1. PLAN 行程表 -->
+        <div v-show="currentTab === 'plan'" class="space-y-6 animate-fade-in">
+            <!-- 天數選擇 -->
+            <div class="flex overflow-x-auto no-scrollbar space-x-3 pb-2">
+                <button v-for="(day, index) in tripDays" :key="index" @click="selectedDay = index"
+                     :class="{'bg-muji-text text-white border-muji-text': selectedDay === index, 'bg-white text-muji-gray border-muji-border': selectedDay !== index}"
+                     class="flex flex-col items-center justify-center min-w-[60px] py-2 rounded border transition-colors shrink-0 shadow-sm">
+                    <span class="text-xs">{{ day.weekday }}</span>
+                    <span class="text-lg font-bold">{{ day.date }}</span>
+                </button>
             </div>
 
-            <div class="flex items-center justify-between bg-ice-blue rounded-xl p-3 my-4">
-                <div class="flex items-center space-x-2 text-navy-blue">
-                    <i class="fa-solid fa-cloud-sun text-2xl"></i>
-                    <div>
-                        <p class="font-bold">名古屋市</p>
-                        <p class="text-xs text-blue-600">降雨機率 20%</p>
-                    </div>
-                </div>
-                <div class="text-right text-navy-blue">
-                    <p class="text-xl font-bold">24°C</p>
-                    <p class="text-xs text-blue-600">體感 26°C</p>
-                </div>
-            </div>
-
-            <div class="mb-3 px-1">
-                <p class="text-base font-bold text-navy-blue">{{ tripDays[selectedDay].theme }}</p>
-            </div>
-
-            <div id="itinerary-list" class="space-y-4">
+            <div class="border-l-2 border-muji-border ml-3 space-y-6 pl-4 relative">
                 <div v-for="(item, idx) in currentDayData" :key="item.id" class="relative group">
-                    <div v-if="idx > 0" class="flex flex-col items-center my-2 text-gray-400">
-                        <div class="h-4 border-l-2 border-dashed border-blue-200"></div>
-                        <div class="flex items-center space-x-2 text-xs my-1 bg-white px-3 py-1 rounded-full shadow-sm">
-                            <i :class="getTransportIcon(item.transport)"></i>
-                            <span>{{ item.transitTime }} 分鐘</span>
+                    <!-- 時間軸節點 -->
+                    <div class="absolute -left-[23px] top-1 w-3 h-3 rounded-full border-2 border-muji-bg"
+                         :class="item.highlight ? 'bg-muji-red' : 'bg-muji-gray'"></div>
+                    
+                    <div class="bg-muji-card rounded border border-muji-border p-4 shadow-muji">
+                        <div class="flex justify-between items-start mb-2">
+                            <span :class="{'text-muji-red font-bold': item.highlight, 'text-muji-gray': !item.highlight}" class="text-xs tracking-wider">
+                                <i class="fa-regular fa-clock mr-1"></i>{{ item.time }}
+                            </span>
+                            <span class="text-[10px] px-2 py-0.5 border border-muji-border rounded text-muji-gray">{{ item.category }}</span>
                         </div>
-                        <div class="h-4 border-l-2 border-dashed border-blue-200"></div>
-                    </div>
-                    <div v-if="idx === 0 && selectedDay > 0" class="flex flex-col items-center my-2 text-gray-400">
-                        <div class="flex items-center space-x-2 text-xs my-1 bg-white px-3 py-1 rounded-full shadow-sm">
-                            <i class="fa-solid fa-hotel"></i>
-                            <i class="fa-solid fa-arrow-right mx-1"></i>
-                            <i :class="getTransportIcon('subway')"></i>
-                            <span>從飯店出發約 15 分鐘</span>
-                        </div>
-                        <div class="h-4 border-l-2 border-dashed border-blue-200"></div>
-                    </div>
-
-                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-blue-50 cursor-move"
-                         :class="{'border-l-4 border-l-orange-400': item.type === 'flight', 'border-l-4 border-l-navy-blue': item.type !== 'flight'}">
-                        <div class="flex justify-between items-start">
-                            <div class="flex-1" @click="openGoogleMaps(item.name)">
-                                <div class="flex items-center space-x-2 mb-1">
-                                    <span class="text-xs px-2 py-0.5 rounded bg-ice-blue text-navy-blue">{{ item.category }}</span>
-                                    <h3 class="font-bold text-gray-800 text-base leading-snug">{{ item.name }}</h3>
-                                </div>
-                                <p v-if="item.time" class="text-xs text-gray-500 mt-1"><i class="fa-regular fa-clock mr-1"></i>{{ item.time }}</p>
-                                <p v-if="item.ticket" class="text-xs text-gray-500 mt-1"><i class="fa-solid fa-ticket mr-1"></i>{{ item.ticket }}</p>
-                                <p v-if="item.note" class="text-xs text-gray-600 mt-2 bg-gray-50 p-2 rounded leading-relaxed">{{ item.note }}</p>
-                            </div>
-                            <button @click="editItem(item)" class="text-gray-300 p-2 hover:text-navy-blue shrink-0"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <h3 class="font-bold text-base mb-1">{{ item.name }}</h3>
+                        <p v-if="item.note" class="text-sm text-muji-gray leading-relaxed mb-3">{{ item.note }}</p>
+                        
+                        <!-- 動作按鈕 -->
+                        <div class="flex space-x-2 border-t border-muji-border pt-3 mt-2">
+                            <button @click="openGoogleMaps(item.name)" class="flex-1 text-xs text-center py-1.5 bg-muji-bg border border-muji-border rounded hover:bg-gray-100 transition">
+                                <i class="fa-solid fa-location-dot mr-1 text-muji-gray"></i> 地圖導航
+                            </button>
+                            <button v-if="item.category === '美食'" @click="searchReview(item.name)" class="flex-1 text-xs text-center py-1.5 bg-muji-bg border border-muji-border rounded hover:bg-gray-100 transition">
+                                <i class="fa-solid fa-utensils mr-1 text-muji-gray"></i> 查看食記
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div v-show="currentTab === 'info'" class="pb-20 space-y-5">
-            <h2 class="text-xl font-bold text-navy-blue border-b-2 border-ice-blue pb-2">旅行資訊</h2>
-
-            <div class="bg-white p-4 rounded-2xl shadow-sm border border-blue-50">
-                <h3 class="font-bold mb-3 text-sm text-gray-500"><i class="fa-solid fa-coins mr-2"></i>即時匯率換算</h3>
-                <div class="flex items-center space-x-3">
-                    <div class="flex-1">
-                        <label class="text-xs text-gray-400">日幣 (JPY)</label>
-                        <input type="number" v-model="calcJpy" class="w-full bg-gray-50 rounded-lg p-2 text-lg font-bold" placeholder="0">
-                    </div>
-                    <i class="fa-solid fa-right-left text-gray-300 mt-4"></i>
-                    <div class="flex-1">
-                        <label class="text-xs text-gray-400">台幣 (TWD) *約0.21</label>
-                        <div class="w-full bg-ice-blue rounded-lg p-2 text-lg font-bold text-navy-blue">{{ (calcJpy * 0.21).toFixed(0) }}</div>
+        <!-- 2. GUIDE 深度導覽 -->
+        <div v-show="currentTab === 'guide'" class="space-y-6 animate-fade-in">
+            <h2 class="text-xl font-serif font-bold text-muji-text border-b border-muji-border pb-2">深度導覽 GUIDE</h2>
+            
+            <div class="bg-muji-card border border-muji-border rounded shadow-muji overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1599598425947-3300262b66bf?auto=format&fit=crop&w=600&q=80" alt="Nagoya Castle" class="w-full h-40 object-cover grayscale-[20%]">
+                <div class="p-4">
+                    <h3 class="font-serif text-lg font-bold mb-2">名古屋城：金之鯱與工藝之巔</h3>
+                    <p class="text-sm text-muji-gray magazine-text mb-4">
+                        建於1612年的名古屋城，最著名的標誌即是天守閣上的金鯱。其「本丸御殿」被譽為近代城郭建築的最高傑作，內部充滿絢麗的金箔壁畫與細膩的木雕。這裡不僅是德川家康鞏固權力的象徵，更見證了尾張德川家的繁華。
+                        <br><br><span class="text-xs text-muji-red">*冷知識：金鯱原本是為了防火的咒符，後來才演變成城主權力的象徵。</span>
+                    </p>
+                    <div class="w-full h-[150px] bg-gray-200 rounded overflow-hidden">
+                        <!-- OpenStreetMap iframe -->
+                        <iframe width="100%" height="150" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.openstreetmap.org/export/embed.html?bbox=136.896,35.182,136.902,35.186&amp;layer=mapnik&amp;marker=35.184,136.899"></iframe>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-white p-4 rounded-2xl shadow-sm border border-blue-50">
-                <h3 class="font-bold mb-3 text-sm text-gray-500"><i class="fa-solid fa-plane-departure mr-2"></i>航班資訊</h3>
-                <div class="mb-4">
-                    <span class="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded mb-2 inline-block">去程 IT778</span>
-                    <div class="flex justify-between items-center text-center">
-                        <div><p class="text-2xl font-bold">17:05</p><p class="text-xs text-gray-500">RMQ</p></div>
-                        <div class="flex-1 px-4 text-gray-300">
-                            <p class="text-[10px] text-gray-400">約 2h 50m</p>
-                            <div class="border-t-2 border-dashed border-gray-300 my-1 relative">
-                                <i class="fa-solid fa-plane absolute top-[-10px] right-1/2 translate-x-1/2"></i>
+            <div class="bg-muji-card border border-muji-border rounded shadow-muji p-4">
+                <h3 class="font-serif text-lg font-bold mb-2">大須商店街</h3>
+                <p class="text-sm text-muji-gray magazine-text">
+                    融合了懷舊與現代、異國與在地。被稱為「日本第一充滿活力的商店街」。除了有超過400年歷史的大須觀音，這裡也是二手衣、古董、電器與各國美食的聚集地。
+                </p>
+            </div>
+        </div>
+
+        <!-- 3. WALLET 記帳與匯率 -->
+        <div v-show="currentTab === 'wallet'" class="space-y-6 animate-fade-in">
+            <h2 class="text-xl font-serif font-bold text-muji-text border-b border-muji-border pb-2">匯率與記帳 WALLET</h2>
+            
+            <!-- 匯率換算器 (支援算式) -->
+            <div class="bg-muji-card border border-muji-border rounded p-4 shadow-muji">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="font-bold text-sm">即時換算與記帳</h3>
+                    <div class="text-xs text-muji-gray flex items-center">
+                        匯率 <input type="number" step="0.001" v-model="exchangeRate" class="w-16 border-b border-muji-border text-right ml-1 outline-none text-muji-text">
+                    </div>
+                </div>
+                
+                <div class="space-y-3">
+                    <input type="text" v-model="expenseName" placeholder="品項名稱 (如: 晚餐、藥妝)" class="w-full p-2 text-sm border border-muji-border rounded outline-none focus:border-muji-gray">
+                    
+                    <div class="flex space-x-2">
+                        <input type="text" v-model="calcInput" placeholder="日幣金額或算式 (如: 500+200*3)" class="flex-1 p-2 text-sm border border-muji-border rounded outline-none focus:border-muji-gray font-mono">
+                        <button @click="calculateAmount" class="bg-muji-text text-white px-4 py-2 rounded text-sm hover:bg-gray-800">=</button>
+                    </div>
+
+                    <div v-if="calculatedJpy > 0" class="flex justify-between items-end bg-muji-bg p-3 rounded border border-muji-border">
+                        <div>
+                            <p class="text-xs text-muji-gray">總額 (JPY)</p>
+                            <p class="text-lg font-bold font-mono">¥ {{ calculatedJpy.toLocaleString() }}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs text-muji-gray">約合台幣 (TWD)</p>
+                            <p class="text-lg font-bold text-muji-red font-mono">NT$ {{ (calculatedJpy * exchangeRate).toFixed(0) }}</p>
+                        </div>
+                    </div>
+
+                    <!-- 圖片上傳 -->
+                    <div class="flex items-center space-x-3">
+                        <label class="flex-1 text-center bg-muji-bg border border-muji-border py-2 rounded cursor-pointer text-xs text-muji-gray hover:bg-gray-100 transition">
+                            <i class="fa-solid fa-camera mr-1"></i> 上傳收據/照片
+                            <input type="file" accept="image/*" class="hidden" @change="handleFileUpload">
+                        </label>
+                        <img v-if="tempImage" :src="tempImage" class="w-10 h-10 object-cover rounded border border-muji-border">
+                    </div>
+
+                    <button @click="saveExpense" class="w-full bg-muji-red text-white py-2 rounded text-sm font-bold tracking-widest mt-2">
+                        加入記帳
+                    </button>
+                </div>
+            </div>
+
+            <!-- 記帳列表 -->
+            <div>
+                <div class="flex justify-between items-end mb-3">
+                    <h3 class="font-bold text-sm text-muji-text">歷史紀錄</h3>
+                    <p class="text-xs text-muji-gray">總花費: ¥ {{ totalExpenseJpy.toLocaleString() }}</p>
+                </div>
+                <div class="space-y-2">
+                    <div v-for="(exp, index) in expenses" :key="index" class="bg-muji-card border border-muji-border p-3 rounded shadow-sm flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div v-if="exp.image" class="w-10 h-10 shrink-0">
+                                <img :src="exp.image" class="w-full h-full object-cover rounded border border-muji-border">
+                            </div>
+                            <div v-else class="w-10 h-10 shrink-0 bg-muji-bg rounded border border-muji-border flex items-center justify-center text-muji-gray">
+                                <i class="fa-solid fa-receipt text-xs"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold">{{ exp.name }}</p>
+                                <p class="text-[10px] text-muji-gray">{{ exp.date }}</p>
                             </div>
                         </div>
-                        <div><p class="text-2xl font-bold">20:55</p><p class="text-xs text-gray-500">NGO</p></div>
-                    </div>
-                </div>
-                <div>
-                    <span class="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded mb-2 inline-block">回程 IT779</span>
-                    <div class="flex justify-between items-center text-center">
-                        <div><p class="text-2xl font-bold">13:45</p><p class="text-xs text-gray-500">NGO</p></div>
-                        <div class="flex-1 px-4 text-gray-300">
-                            <p class="text-[10px] text-gray-400">約 3h 20m</p>
-                            <div class="border-t-2 border-dashed border-gray-300 my-1 relative">
-                                <i class="fa-solid fa-plane absolute top-[-10px] right-1/2 translate-x-1/2"></i>
-                            </div>
+                        <div class="text-right">
+                            <p class="text-sm font-bold font-mono">¥{{ exp.jpy }}</p>
+                            <p class="text-[10px] text-muji-gray font-mono">NT${{ exp.twd }}</p>
+                            <button @click="deleteExpense(index)" class="text-[10px] text-muji-red mt-1"><i class="fa-solid fa-trash"></i> 刪除</button>
                         </div>
-                        <div><p class="text-2xl font-bold">16:05</p><p class="text-xs text-gray-500">RMQ</p></div>
+                    </div>
+                    <div v-if="expenses.length === 0" class="text-center text-sm text-muji-gray py-4 border border-dashed border-muji-border rounded">
+                        目前尚無記帳紀錄
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. LISTS 清單 -->
+        <div v-show="currentTab === 'lists'" class="space-y-6 animate-fade-in">
+            <h2 class="text-xl font-serif font-bold text-muji-text border-b border-muji-border pb-2">清單與備忘 LISTS</h2>
+            
+            <!-- CheckList -->
+            <div class="bg-muji-card border border-muji-border rounded shadow-muji p-4">
+                <h3 class="font-bold text-sm mb-3">行前準備 CheckList</h3>
+                <div class="space-y-3">
+                    <label v-for="(item, idx) in checkList" :key="idx" class="flex items-center space-x-3 cursor-pointer group">
+                        <input type="checkbox" v-model="item.done" @change="saveLocalData" class="rounded border-muji-border text-muji-red focus:ring-muji-red">
+                        <span :class="{'line-through text-muji-gray': item.done, 'text-muji-text': !item.done}" class="text-sm transition-colors">{{ item.text }}</span>
+                    </label>
+                </div>
+                <!-- 新增項目 -->
+                <div class="mt-4 flex space-x-2 border-t border-muji-border pt-3">
+                    <input type="text" v-model="newCheckItem" @keyup.enter="addCheckItem" placeholder="新增準備項目..." class="flex-1 p-2 text-sm border border-muji-border rounded outline-none">
+                    <button @click="addCheckItem" class="bg-muji-text text-white px-3 py-1 rounded text-sm"><i class="fa-solid fa-plus"></i></button>
+                </div>
+            </div>
+
+            <!-- Memo -->
+            <div class="bg-muji-card border border-muji-border rounded shadow-muji p-4 flex flex-col h-[300px]">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="font-bold text-sm">個人備忘錄</h3>
+                    <button @click="isEditingMemo = !isEditingMemo" class="text-xs text-muji-gray border border-muji-border px-2 py-1 rounded">
+                        {{ isEditingMemo ? '完成編輯' : '編輯' }}
+                    </button>
+                </div>
+                
+                <textarea v-if="isEditingMemo" v-model="memoText" @input="saveLocalData" class="flex-1 w-full p-2 text-sm border border-muji-border rounded outline-none resize-none bg-muji-bg" placeholder="輸入文字或貼上網址..."></textarea>
+                
+                <div v-else class="flex-1 w-full p-2 text-sm border border-transparent overflow-y-auto no-scrollbar break-words whitespace-pre-wrap" v-html="formattedMemo"></div>
+            </div>
+        </div>
+
+        <!-- 5. INFO 資訊 -->
+        <div v-show="currentTab === 'info'" class="space-y-6 animate-fade-in">
+            <h2 class="text-xl font-serif font-bold text-muji-text border-b border-muji-border pb-2">實用資訊 INFO</h2>
+            
+            <div class="grid grid-cols-2 gap-3">
+                <a href="https://tenki.jp/forecast/5/26/5110/23100/" target="_blank" class="bg-muji-card border border-muji-border rounded p-4 text-center shadow-sm block hover:bg-gray-50">
+                    <i class="fa-solid fa-cloud-sun text-2xl text-muji-gray mb-2"></i>
+                    <p class="text-sm font-bold">當地天氣</p>
+                    <p class="text-[10px] text-muji-gray">日本氣象廳 tenki.jp</p>
+                </a>
+                <a href="https://vjw-lp.digital.go.jp/zh-hant/" target="_blank" class="bg-muji-card border border-muji-border rounded p-4 text-center shadow-sm block hover:bg-gray-50">
+                    <i class="fa-solid fa-qrcode text-2xl text-muji-gray mb-2"></i>
+                    <p class="text-sm font-bold">Visit Japan Web</p>
+                    <p class="text-[10px] text-muji-gray">入境 QR Code</p>
+                </a>
+            </div>
+
+            <!-- 緊急聯絡 -->
+            <div class="bg-muji-card border border-muji-border rounded p-4 shadow-muji">
+                <h3 class="font-bold text-sm mb-3 text-muji-red"><i class="fa-solid fa-truck-medical mr-1"></i> 緊急聯絡資訊</h3>
+                <div class="space-y-3 text-sm">
+                    <div class="flex justify-between border-b border-muji-border pb-2">
+                        <span class="text-muji-gray">報警 (警察)</span>
+                        <span class="font-bold font-mono text-lg tracking-widest">110</span>
+                    </div>
+                    <div class="flex justify-between border-b border-muji-border pb-2">
+                        <span class="text-muji-gray">救護車 / 消防</span>
+                        <span class="font-bold font-mono text-lg tracking-widest">119</span>
+                    </div>
+                    <div>
+                        <span class="text-muji-gray block mb-1">台北駐日經濟文化代表處</span>
+                        <span class="font-bold font-mono text-sm">0800-004781</span><br>
+                        <span class="text-[10px] text-muji-gray">(免付費旅外國人急難救助專線)</span>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-white p-4 rounded-2xl shadow-sm border border-blue-50">
-                <h3 class="font-bold mb-3 text-sm text-gray-500"><i class="fa-solid fa-bed mr-2"></i>住宿資訊</h3>
-                <h4 class="font-bold text-lg text-gray-800">名古屋榮弗爾札飯店</h4>
-                <p class="text-xs text-gray-500 mt-1">FORZA Hotel Nagoya Sakae</p>
-                <div class="mt-3 space-y-2 text-sm text-gray-600">
-                    <p><i class="fa-solid fa-location-dot w-5 text-center text-gray-400"></i> 愛知縣名古屋市中區榮3丁目17-25</p>
-                    <p><i class="fa-solid fa-phone w-5 text-center text-gray-400"></i> +81 52-243-3111</p>
-                </div>
-                <button @click="openGoogleMaps('FORZA Hotel Nagoya Sakae')" class="mt-4 w-full bg-ice-blue text-navy-blue py-2 rounded-lg font-bold text-sm">開啟導航</button>
-            </div>
-
-            <div class="bg-amber-50 p-4 rounded-2xl shadow-sm border border-amber-100">
-                <h3 class="font-bold mb-3 text-sm text-amber-600"><i class="fa-solid fa-lightbulb mr-2"></i>專業叮嚀</h3>
-                <ul class="space-y-2 text-xs text-gray-700">
-                    <li><i class="fa-solid fa-mobile-screen-button text-amber-400 mr-2"></i>Visit Japan Web 先安裝 QR Code，通關更快速</li>
-                    <li><i class="fa-solid fa-passport text-amber-400 mr-2"></i>退稅記得帶護照正本（UNIQLO / GU / MUJI）</li>
-                    <li><i class="fa-solid fa-credit-card text-amber-400 mr-2"></i>手機綁定 Suica / PASMO，地鐵與超商都超方便</li>
-                    <li><i class="fa-solid fa-suitcase text-amber-400 mr-2"></i>行李箱空間預留 20kg 託運額度！</li>
+            <!-- 注意事項 -->
+            <div class="bg-muji-bg border border-muji-border rounded p-4 shadow-sm">
+                <h3 class="font-bold text-sm mb-3"><i class="fa-solid fa-triangle-exclamation mr-1"></i> 注意事項與禁忌</h3>
+                <ul class="list-disc list-inside text-xs text-muji-gray space-y-2 leading-relaxed">
+                    <li><strong class="text-muji-text">違禁品：</strong>生鮮水果、肉類製品（含泡麵肉塊）嚴禁入境台灣。</li>
+                    <li><strong class="text-muji-text">免稅門檻：</strong>日本同一店家未稅滿 5,000 日圓可退稅，需出示護照正本。</li>
+                    <li><strong class="text-muji-text">禮儀：</strong>電車內請將手機設為靜音，避免通話；手扶梯一般靠左站立（關西除外，但名古屋通常靠左）。</li>
+                    <li><strong class="text-muji-text">飲水：</strong>餐廳通常提供冰水，若需溫水可說「お湯(O-yu) をください」。</li>
                 </ul>
             </div>
-
-            <div class="bg-red-50 p-4 rounded-2xl shadow-sm border border-red-100">
-                <h3 class="font-bold mb-2 text-sm text-red-500"><i class="fa-solid fa-truck-medical mr-2"></i>緊急聯絡</h3>
-                <div class="flex justify-between text-sm">
-                    <span>報警 (警察)：<span class="font-bold">110</span></span>
-                    <span>救護車/消防：<span class="font-bold">119</span></span>
-                </div>
-            </div>
         </div>
 
-        <div v-show="currentTab === 'shopping'" class="pb-20">
-            <h2 class="text-xl font-bold text-navy-blue border-b-2 border-ice-blue pb-2 mb-4">必買清單</h2>
-            <div class="grid grid-cols-2 gap-3">
-                <div v-for="item in shoppingList" :key="item.id" class="bg-white rounded-xl overflow-hidden shadow-sm border border-blue-50">
-                    <img :src="item.image" class="w-full h-24 object-cover" alt="商品圖片">
-                    <div class="p-2">
-                        <p class="text-sm font-bold truncate">{{ item.name }}</p>
-                        <p class="text-xs text-gray-400">{{ item.where }}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div v-show="currentTab === 'expense'" class="pb-20">
-            <div class="bg-navy-blue text-white p-5 rounded-2xl shadow-md mb-5 text-center">
-                <p class="text-sm text-blue-200">旅途總花費</p>
-                <p class="text-3xl font-bold mt-1">¥ {{ totalExpense.toLocaleString() }}</p>
-            </div>
-            <div class="space-y-3">
-                <div v-for="exp in expenses" :key="exp.id" class="bg-white p-3 rounded-xl shadow-sm flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-full bg-ice-blue flex items-center justify-center text-navy-blue">
-                            <i :class="getExpenseIcon(exp.category)"></i>
-                        </div>
-                        <div>
-                            <p class="font-bold text-sm">{{ exp.name }}</p>
-                            <p class="text-xs text-gray-400">{{ exp.date }} • {{ exp.payment }}</p>
-                        </div>
-                    </div>
-                    <div class="font-bold text-navy-blue">¥ {{ exp.amount.toLocaleString() }}</div>
-                </div>
-            </div>
-        </div>
-
-        <button v-show="currentTab !== 'info'" @click="openModal()" class="fixed bottom-6 right-6 w-14 h-14 bg-navy-blue text-white rounded-full shadow-lg flex items-center justify-center text-2xl hover:scale-105 transition-transform z-30">
-            <i class="fa-solid fa-plus"></i>
-        </button>
     </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="absolute bottom-0 w-full bg-white border-t border-muji-border flex justify-around items-center pb-safe z-30 h-16 shadow-[0_-2px_10px_rgba(0,0,0,0.02)]">
+        <button @click="currentTab = 'plan'" :class="{'text-muji-text': currentTab === 'plan', 'text-muji-gray/50': currentTab !== 'plan'}" class="flex flex-col items-center justify-center w-full h-full transition">
+            <i class="fa-solid fa-map mb-1 text-lg"></i>
+            <span class="text-[10px] tracking-wider font-bold">PLAN</span>
+        </button>
+        <button @click="currentTab = 'guide'" :class="{'text-muji-text': currentTab === 'guide', 'text-muji-gray/50': currentTab !== 'guide'}" class="flex flex-col items-center justify-center w-full h-full transition">
+            <i class="fa-solid fa-book-open mb-1 text-lg"></i>
+            <span class="text-[10px] tracking-wider font-bold">GUIDE</span>
+        </button>
+        <button @click="currentTab = 'wallet'" :class="{'text-muji-text': currentTab === 'wallet', 'text-muji-gray/50': currentTab !== 'wallet'}" class="flex flex-col items-center justify-center w-full h-full transition">
+            <i class="fa-solid fa-wallet mb-1 text-lg"></i>
+            <span class="text-[10px] tracking-wider font-bold">WALLET</span>
+        </button>
+        <button @click="currentTab = 'lists'" :class="{'text-muji-text': currentTab === 'lists', 'text-muji-gray/50': currentTab !== 'lists'}" class="flex flex-col items-center justify-center w-full h-full transition">
+            <i class="fa-solid fa-list-check mb-1 text-lg"></i>
+            <span class="text-[10px] tracking-wider font-bold">LISTS</span>
+        </button>
+        <button @click="currentTab = 'info'" :class="{'text-muji-text': currentTab === 'info', 'text-muji-gray/50': currentTab !== 'info'}" class="flex flex-col items-center justify-center w-full h-full transition">
+            <i class="fa-solid fa-circle-info mb-1 text-lg"></i>
+            <span class="text-[10px] tracking-wider font-bold">INFO</span>
+        </button>
+    </nav>
 </div>
 
 <script>
     const { createApp } = Vue;
+    
     createApp({
         data() {
             return {
-                currentTab: 'itinerary',
+                currentTab: 'plan',
                 selectedDay: 0,
-                calcJpy: '',
                 tripDays: [
-                    { date: '10', weekday: 'Wed', theme: '✈️ Day 1 — 降落名古屋，深夜入城補給' },
-                    { date: '11', weekday: 'Thu', theme: '🏯 Day 2 — 工業文明、歷史名城與香氛美學' },
-                    { date: '12', weekday: 'Fri', theme: '🛍️ Day 3 — 文藝老街與平價服飾旗艦店' },
-                    { date: '13', weekday: 'Sat', theme: '🐬 Day 4 — 深海藍色療癒與極地機械' },
-                    { date: '14', weekday: 'Sun', theme: '🌲 Day 5 — 神宮淨化與終極掃貨之旅' },
-                    { date: '15', weekday: 'Mon', theme: '🛫 Day 6 — 機場巡禮與返台' }
+                    { date: '10', weekday: 'Wed' },
+                    { date: '11', weekday: 'Thu' },
+                    { date: '12', weekday: 'Fri' },
+                    { date: '13', weekday: 'Sat' }
                 ],
                 itineraryData: [
-                    // Day 1 — 6/10
+                    // Day 1
                     [
-                        { id: 101, type: 'flight',    category: '航班', name: '虎航 IT778 降落 NGO', time: '20:55', note: '先在手機準備好 Visit Japan Web QR Code，通關更快', transport: 'walk', transitTime: 5 },
-                        { id: 102, type: 'transport', category: '通關', name: '領取行李 & 通關', time: '21:10 - 22:00', note: '預計 21:50 左右領完行李並完成海關檢查', transport: 'walk', transitTime: 15 },
-                        { id: 103, type: 'transport', category: '交通', name: '名鐵 μ-SKY 機場特急', time: '22:15 - 23:10', note: '名鐵名古屋站下車，轉地鐵東山線/名城線至榮站', transport: 'train', transitTime: 15 },
-                        { id: 104, type: 'hotel',     category: '住宿', name: '名古屋榮弗爾札飯店 Check-in', time: '23:25', note: '放好行李，輕裝出發', transport: 'walk', transitTime: 5 },
-                        { id: 105, type: 'shopping',  category: '購物', name: '唐吉訶德 榮店', time: '23:50', ticket: '24小時營業', note: '買保養品、宵夜、休足時間。深夜人潮少，逛起來反而舒服！', transport: 'walk', transitTime: 5 }
+                        { id: 101, category: '交通', name: '虎航 IT778 抵達中部機場', time: '20:55', note: '備好 Visit Japan Web', highlight: true },
+                        { id: 102, category: '住宿', name: '榮區飯店 Check-in', time: '23:20', note: '放好行李輕裝出發' },
+                        { id: 103, category: '購物', name: '唐吉訶德 榮店', time: '23:50', note: '24小時營業，買宵夜與休足時間' }
                     ],
-                    // Day 2 — 6/11
+                    // Day 2
                     [
-                        { id: 201, type: 'food',       category: '早餐', name: 'コメダ珈琲店 榮中心公園店', time: '09:00', note: '點飲料送紅豆泥吐司，享受悠閒的 Morning Service', transport: 'subway', transitTime: 10 },
-                        { id: 202, type: 'attraction', category: '景點', name: '名古屋城', time: '10:30', ticket: '門票 ¥500', note: '重點參觀「本丸御殿」，金箔壁畫與精密木構造是日本建築工藝巔峰', transport: 'subway', transitTime: 25 },
-                        { id: 203, type: 'food',       category: '午餐', name: '金魚池橫丁 — 味噌烏龍麵', time: '13:00', note: '古樸商店街內享用名古屋紅味噌烏龍麵', transport: 'bus', transitTime: 20 },
-                        { id: 204, type: 'attraction', category: '景點', name: 'TOYOTA 產業技術紀念館', time: '14:30', ticket: '門票 ¥500', note: '從紡織機械到汽車組裝線，大型機具現場運作，工業自動化與製程演進一覽無遺', transport: 'subway', transitTime: 30 },
-                        { id: 205, type: 'shopping',   category: '購物', name: '無印良品 MUJI 榮店', time: '17:00', note: '超音波芬香噴霧器、單方精油系列非常齊全，適合挑選幾款舒壓', transport: 'subway', transitTime: 15 },
-                        { id: 206, type: 'food',       category: '晚餐', name: '熱田蓬萊軒（松坂屋店）— 鰻魚飯三吃', time: '19:00', note: '傳說中的ひつまぶし，建議提前預約', transport: 'walk', transitTime: 10 },
-                        { id: 207, type: 'attraction', category: '夜景', name: '中部電力 MIRAI TOWER 觀景台', time: '20:30', ticket: '觀景台 ¥700', note: '俯瞰榮區璀璨夜間街景，拍照打卡必備', transport: 'walk', transitTime: 5 }
-                    ],
-                    // Day 3 — 6/12
-                    [
-                        { id: 301, type: 'food',       category: '早餐', name: 'コンパル 榮地下街店 — 炸蝦三明治', time: '09:00', note: '名古屋人氣早餐，炸蝦三明治是招牌必點', transport: 'subway', transitTime: 15 },
-                        { id: 302, type: 'attraction', category: '景點', name: '大須觀音 & 大須商店街', time: '10:30', note: '參拜壯麗觀音寺後逛大須商店街，懷舊老舖與電子零件共存，非常多元', transport: 'subway', transitTime: 15 },
-                        { id: 303, type: 'food',       category: '午餐', name: '大須小吃巡禮', time: '13:00', note: '鯛魚燒、烤糰子、拿坡里披薩，邊走邊吃！', transport: 'walk', transitTime: 5 },
-                        { id: 304, type: 'shopping',   category: '購物', name: '3COINS 大須店', time: '15:00', note: '設計精美且具備生活智慧的小雜貨，¥330 起', transport: 'walk', transitTime: 5 },
-                        { id: 305, type: 'shopping',   category: '購物', name: 'UNIQLO & GU 榮 SKYLE 店', time: '16:30', note: '5F 是 UNIQLO、6F 是 GU，兩家連著逛最有效率，記得帶護照退稅！', transport: 'subway', transitTime: 20 },
-                        { id: 306, type: 'food',       category: '晚餐', name: '矢場炸豬排 榮 CentRise 店', time: '19:30', note: '名古屋最強紅味噌豬排，外酥內嫩，沾上甜辣味噌醬絕配', transport: 'walk', transitTime: 10 }
-                    ],
-                    // Day 4 — 6/13
-                    [
-                        { id: 401, type: 'food',       category: '早餐', name: 'Bucyo Coffee — 小倉紅豆泥吐司', time: '08:30', note: '濃郁小倉紅豆泥配特製鮮奶油吐司，名古屋早餐文化精髓', transport: 'subway', transitTime: 20 },
-                        { id: 402, type: 'transport',  category: '交通', name: '購買「土日環保券」', time: '09:30', ticket: '土日環保券 ¥740', note: '週末限定，地鐵全線一日自由乘坐，名城線直通名港線至名古屋港', transport: 'subway', transitTime: 30 },
-                        { id: 403, type: 'attraction', category: '景點', name: '名古屋港水族館', time: '10:15', ticket: '門票 ¥2,030', note: '北館：虎鯨、白鯨表演水槽；南館：震撼沙丁魚龍捲風，南極之旅企鵝展示', transport: 'walk', transitTime: 5 },
-                        { id: 404, type: 'attraction', category: '景點', name: '南極觀測船 富士號', time: '14:30', ticket: '含水族館套票', note: '退役破冰船，保留精密航行設備、引擎室與極地維生系統，工程控必看', transport: 'walk', transitTime: 10 },
-                        { id: 405, type: 'shopping',   category: '購物', name: '返回榮區 — 最後補刀', time: '16:30', note: '藥妝或百貨掃尾，想買的東西趁今晚補齊', transport: 'subway', transitTime: 30 },
-                        { id: 406, type: 'food',       category: '晚餐', name: '鳥開總本家 — 名古屋交趾雞串燒 & 親子丼', time: '19:00', note: '得獎無數的名古屋交趾雞，串燒與親子丼都是必點', transport: 'walk', transitTime: 10 }
-                    ],
-                    // Day 5 — 6/14
-                    [
-                        { id: 501, type: 'food',       category: '早餐', name: 'Coffee House Kako 花車本店', time: '09:00', note: '著名手工果醬配紅豆泥吐司，昭和氛圍滿滿的老咖啡館', transport: 'subway', transitTime: 20 },
-                        { id: 502, type: 'attraction', category: '景點', name: '熱田神宮', time: '11:00', note: '漫步千年神木森林參道，感受莊嚴肅穆的氛圍，免費入場', transport: 'subway', transitTime: 10 },
-                        { id: 503, type: 'food',       category: '午餐', name: '宮棊子麵 Kishimen — 神宮周邊', time: '13:00', note: '口感扁平且滑順的名古屋傳統麵食，在地人最愛的神宮名物', transport: 'subway', transitTime: 30 },
-                        { id: 504, type: 'shopping',   category: '購物', name: '無印良品 名鐵百貨店（中部最大）', time: '15:00', note: '名古屋車站旁，中部地區最大規模 MUJI，品項極多，適合深度採購', transport: 'walk', transitTime: 10 },
-                        { id: 505, type: 'hotel',      category: '整理', name: '行李大閱兵！', time: '17:30', note: '拿出所有戰利品總整理。用 MUJI 收納袋分層裝箱，確保 20kg 重量均勻分配', transport: 'walk', transitTime: 5 },
-                        { id: 506, type: 'food',       category: '晚餐', name: '飛驒牛燒肉 — 最後晚餐', time: '19:30', note: '入口即化的和牛犒賞這幾天的辛勞，值得！', transport: 'walk', transitTime: 10 }
-                    ],
-                    // Day 6 — 6/15
-                    [
-                        { id: 601, type: 'food',       category: '早餐', name: '飯店周邊喫茶店', time: '08:30', note: '睡飽一點，選一家充滿昭和氛圍的小咖啡店，享受最後的 Morning Service', transport: 'subway', transitTime: 15 },
-                        { id: 602, type: 'transport',  category: '交通', name: '地鐵 → 名古屋站 → 名鐵特急 → 機場', time: '10:30', note: '搭地鐵至名古屋站，轉名鐵機場特急 μ-SKY 前往中部國際機場', transport: 'train', transitTime: 45 },
-                        { id: 603, type: 'shopping',   category: '伴手禮', name: 'えびせんべいの里 — 蝦餅', time: '11:30', note: '機場 4 樓，最受歡迎的伴手禮！多買幾盒給同事', transport: 'walk', transitTime: 60 },
-                        { id: 604, type: 'flight',     category: '航班', name: '虎航 IT779 起飛 → 台中', time: '13:45', note: '預計 16:05 抵達台中清泉崗機場，滿載而歸！', transport: 'walk', transitTime: 0 }
+                        { id: 201, category: '美食', name: 'コメダ珈琲店', time: '09:00', note: '點飲料送紅豆泥吐司' },
+                        { id: 202, category: '景點', name: '名古屋城', time: '10:30', note: '參觀本丸御殿', highlight: true },
+                        { id: 203, category: '美食', name: '熱田蓬萊軒', time: '18:30', note: '預約鰻魚飯三吃', highlight: true }
                     ]
+                    // ... 為了展示簡化，僅放兩天範例
                 ],
-                shoppingList: [
-                    { id: 1, name: 'えびせんべいの里 蝦餅',    where: '中部國際機場 4F',    image: 'https://images.unsplash.com/photo-1599598425947-3300262b66bf?auto=format&fit=crop&w=200&q=80' },
-                    { id: 2, name: '無印良品 單方精油',        where: 'MUJI 榮店 / 名鐵百貨', image: 'https://images.unsplash.com/photo-1608528577891-eb055944f2e7?auto=format&fit=crop&w=200&q=80' },
-                    { id: 3, name: '矢場味噌 紅味噌',          where: '矢場豬排店 / 超市',    image: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=200&q=80' },
-                    { id: 4, name: 'UNIQLO 科技感衣物',        where: 'UNIQLO 榮 SKYLE 5F',   image: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=200&q=80' },
-                    { id: 5, name: 'GU 當季服飾',              where: 'GU 榮 SKYLE 6F',       image: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=200&q=80' },
-                    { id: 6, name: '3COINS 生活雜貨',          where: '3COINS 大須店',        image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=200&q=80' }
+                
+                // Wallet State
+                exchangeRate: 0.21,
+                expenseName: '',
+                calcInput: '',
+                calculatedJpy: 0,
+                tempImage: null,
+                expenses: [],
+                
+                // Lists State
+                checkList: [
+                    { text: '護照正本 (效期半年以上)', done: false },
+                    { text: '信用卡 (海外高回饋)', done: false },
+                    { text: '日幣現金', done: false },
+                    { text: '行動電源 & 充電線', done: false }
                 ],
-                expenses: [
-                    { id: 1, category: '交通', name: '名鐵 μ-SKY 機場特急',   date: '6/10', payment: 'Suica',  amount: 1250 },
-                    { id: 2, category: '購物', name: '唐吉訶德 榮店',           date: '6/10', payment: '信用卡', amount: 4500 },
-                    { id: 3, category: '門票', name: '名古屋城',                date: '6/11', payment: '現金',   amount: 500  },
-                    { id: 4, category: '門票', name: 'TOYOTA 產業技術紀念館',   date: '6/11', payment: '現金',   amount: 500  },
-                    { id: 5, category: '飲食', name: '熱田蓬萊軒 鰻魚飯三吃',  date: '6/11', payment: '信用卡', amount: 4200 },
-                    { id: 6, category: '門票', name: 'MIRAI TOWER 觀景台',     date: '6/11', payment: '現金',   amount: 700  },
-                    { id: 7, category: '飲食', name: '矢場炸豬排',             date: '6/12', payment: '信用卡', amount: 2200 },
-                    { id: 8, category: '交通', name: '土日環保券',              date: '6/13', payment: 'Suica',  amount: 740  },
-                    { id: 9, category: '門票', name: '名古屋港水族館',          date: '6/13', payment: '信用卡', amount: 2030 }
-                ]
+                newCheckItem: '',
+                memoText: '買藥妝記得比價：\n大國藥妝、松本清。\n推薦網站: https://www.cosme.net/',
+                isEditingMemo: false
             }
         },
         computed: {
-            currentDayData() { return this.itineraryData[this.selectedDay] || []; },
-            totalExpense()    { return this.expenses.reduce((sum, e) => sum + e.amount, 0); }
+            currentDayData() { 
+                return this.itineraryData[this.selectedDay] || []; 
+            },
+            totalExpenseJpy() {
+                return this.expenses.reduce((sum, exp) => sum + exp.jpy, 0);
+            },
+            formattedMemo() {
+                // 自動將 URL 轉為可點擊連結，並將 \n 轉為 <br>
+                const urlRegex = /(https?:\/\/[^\s]+)/g;
+                let html = this.memoText.replace(urlRegex, '<a href="$1" target="_blank" class="text-muji-red underline border-b border-muji-red/30 pb-0.5">$1</a>');
+                return html.replace(/\n/g, '<br>');
+            }
         },
-        mounted() { if (this.currentTab === 'itinerary') this.initSortable(); },
-        watch: {
-            currentTab(v) { if (v === 'itinerary') setTimeout(() => this.initSortable(), 100); },
-            selectedDay()  { setTimeout(() => this.initSortable(), 100); }
+        mounted() {
+            this.loadLocalData();
         },
         methods: {
-            initSortable() {
-                const el = document.getElementById('itinerary-list');
-                if (el) new Sortable(el, {
-                    animation: 150,
-                    ghostClass: 'opacity-50',
-                    onEnd: (evt) => {
-                        const item = this.itineraryData[this.selectedDay].splice(evt.oldIndex, 1)[0];
-                        this.itineraryData[this.selectedDay].splice(evt.newIndex, 0, item);
+            openGoogleMaps(q) { 
+                window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`, '_blank'); 
+            },
+            searchReview(q) {
+                window.open(`https://www.google.com/search?q=${encodeURIComponent(q + ' 食記 推薦')}`, '_blank');
+            },
+            
+            // --- Wallet 計算機與記帳 ---
+            calculateAmount() {
+                if (!this.calcInput) return;
+                try {
+                    // 安全的數學算式過濾 (僅允許數字與數學符號)
+                    const sanitized = this.calcInput.replace(/[^0-9+\-*/.]/g, '');
+                    if(sanitized) {
+                        this.calculatedJpy = Math.round(new Function('return ' + sanitized)());
                     }
+                } catch (e) {
+                    alert('算式格式錯誤');
+                }
+            },
+            handleFileUpload(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        // 使用 Canvas 壓縮圖片，避免 LocalStorage 爆滿
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const MAX_WIDTH = 200; // 縮圖大小
+                        const scaleSize = MAX_WIDTH / img.width;
+                        canvas.width = MAX_WIDTH;
+                        canvas.height = img.height * scaleSize;
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        
+                        // 轉換為 Base64 (0.6 畫質)
+                        this.tempImage = canvas.toDataURL('image/jpeg', 0.6);
+                    }
+                    img.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            },
+            saveExpense() {
+                if(this.calculatedJpy <= 0 || !this.expenseName) {
+                    alert('請輸入名稱並計算出金額！');
+                    return;
+                }
+                
+                const date = new Date();
+                const dateStr = `${date.getMonth()+1}/${date.getDate()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+                
+                this.expenses.unshift({
+                    name: this.expenseName,
+                    jpy: this.calculatedJpy,
+                    twd: Math.round(this.calculatedJpy * this.exchangeRate),
+                    image: this.tempImage,
+                    date: dateStr
                 });
+                
+                // 重置
+                this.expenseName = '';
+                this.calcInput = '';
+                this.calculatedJpy = 0;
+                this.tempImage = null;
+                
+                this.saveLocalData();
             },
-            getTransportIcon(type) {
-                const icons = { walk: 'fa-solid fa-person-walking', car: 'fa-solid fa-car', bus: 'fa-solid fa-bus', train: 'fa-solid fa-train', subway: 'fa-solid fa-train-subway' };
-                return icons[type] || 'fa-solid fa-person-walking';
+            deleteExpense(index) {
+                if(confirm('確定刪除此筆記帳？')) {
+                    this.expenses.splice(index, 1);
+                    this.saveLocalData();
+                }
             },
-            getExpenseIcon(cat) {
-                const icons = { '交通': 'fa-solid fa-train', '飲食': 'fa-solid fa-utensils', '住宿': 'fa-solid fa-bed', '門票': 'fa-solid fa-ticket', '購物': 'fa-solid fa-bag-shopping' };
-                return icons[cat] || 'fa-solid fa-circle-dollar-to-slot';
+            
+            // --- Lists ---
+            addCheckItem() {
+                if(this.newCheckItem.trim()) {
+                    this.checkList.push({ text: this.newCheckItem, done: false });
+                    this.newCheckItem = '';
+                    this.saveLocalData();
+                }
             },
-            openGoogleMaps(q) { window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`, '_blank'); },
-            openModal()       { alert('此處可串接彈出式表單 (新增行程/購物/花費)！'); },
-            editItem(item)    { if (confirm(`確定要刪除「${item.name}」嗎？`)) this.itineraryData[this.selectedDay] = this.itineraryData[this.selectedDay].filter(i => i.id !== item.id); }
+            
+            // --- LocalStorage 永久保存 ---
+            saveLocalData() {
+                const data = {
+                    expenses: this.expenses,
+                    checkList: this.checkList,
+                    memoText: this.memoText,
+                    exchangeRate: this.exchangeRate
+                };
+                localStorage.setItem('muji_trip_data', JSON.stringify(data));
+            },
+            loadLocalData() {
+                const raw = localStorage.getItem('muji_trip_data');
+                if (raw) {
+                    try {
+                        const data = JSON.parse(raw);
+                        if (data.expenses) this.expenses = data.expenses;
+                        if (data.checkList) this.checkList = data.checkList;
+                        if (data.memoText) this.memoText = data.memoText;
+                        if (data.exchangeRate) this.exchangeRate = data.exchangeRate;
+                    } catch(e) { console.error('讀取資料錯誤', e); }
+                }
+            }
         }
     }).mount('#app')
 </script>
