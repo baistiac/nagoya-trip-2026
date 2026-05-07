@@ -61,7 +61,7 @@
             <p class="text-xs text-muji-gray tracking-wider mt-1">2026 SUMMER TRIP</p>
         </div>
         <div class="text-right">
-            <span class="text-xs bg-muji-bg px-2 py-1 rounded border border-muji-border text-muji-gray">v1.2</span>
+            <span class="text-xs bg-muji-bg px-2 py-1 rounded border border-muji-border text-muji-gray">v1.3</span>
         </div>
     </header>
 
@@ -107,72 +107,111 @@
             </div>
         </div>
 
-        <!-- 2. GUIDE 深度導覽 -->
-        <div v-show="currentTab === 'guide'" class="space-y-6 animate-fade-in">
-            <h2 class="text-xl font-serif font-bold text-muji-text border-b border-muji-border pb-2">深度導覽 GUIDE</h2>
+        <!-- 2. SHOPPING 伴手禮採購指南 (取代原本的 GUIDE) -->
+        <div v-show="currentTab === 'shopping'" class="space-y-6 animate-fade-in">
+            <h2 class="text-xl font-serif font-bold text-muji-text border-b border-muji-border pb-2">採購指南 SHOPPING</h2>
             
-            <!-- 名古屋城 -->
-            <div class="bg-muji-card border border-muji-border rounded shadow-muji overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1599598425947-3300262b66bf?auto=format&fit=crop&w=600&q=80" alt="名古屋城" class="w-full h-40 object-cover grayscale-[20%]">
-                <div class="p-4">
-                    <h3 class="font-serif text-lg font-bold mb-2">名古屋城：金之鯱與工藝之巔</h3>
-                    <p class="text-sm text-muji-gray magazine-text mb-4">
-                        建於1612年的名古屋城，最著名的標誌即是天守閣上的金鯱。其「本丸御殿」被譽為近代城郭建築的最高傑作，內部充滿絢麗的金箔壁畫與細膩的木雕。這裡不僅是德川家康鞏固權力的象徵，更見證了尾張德川家的繁華。<br><br>
-                        <span class="text-muji-red text-xs">*冷知識：金鯱原本是為了防火的咒符，後來才演變成城主權力的象徵。</span>
-                    </p>
-                    <div class="w-full h-[150px] bg-gray-200 rounded overflow-hidden">
-                        <iframe width="100%" height="150" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.openstreetmap.org/export/embed.html?bbox=136.896,35.182,136.902,35.186&amp;layer=mapnik&amp;marker=35.184,136.899"></iframe>
+            <!-- Day 1 -->
+            <div class="bg-muji-card border border-muji-border rounded shadow-muji p-4">
+                <h3 class="font-serif text-lg font-bold mb-2 flex items-center">
+                    <span class="bg-muji-text text-white text-xs px-2 py-1 rounded mr-2 font-sans">Day 1</span>
+                    榮・唐吉訶德
+                </h3>
+                <p class="text-xs text-muji-gray mb-3 border-b border-muji-border pb-2">深夜抵達，以消耗品與零食為主，不怕壓壞。</p>
+                <ul class="list-disc list-inside text-sm text-muji-text space-y-2 magazine-text">
+                    <li><span class="font-bold">泡麵與零食：</span>日清杯麵、咚兵衛烏龍麵、Calbee 薯條杯等，台日價差大，適合囤貨當戰備糧食。</li>
+                    <li><span class="font-bold">保養品藥妝：</span>日本米面膜、各品牌平價面膜 (CP值高適合小禮物)。常用感冒藥、腸胃藥、眼藥水。</li>
+                </ul>
+                <p class="text-xs text-muji-red mt-3 bg-red-50 p-2 rounded">→ 策略：這天先買這幾天要用的，真正的名古屋在地名產留給最後幾天。</p>
+            </div>
+
+            <!-- Day 2 -->
+            <div class="bg-muji-card border border-muji-border rounded shadow-muji p-4">
+                <h3 class="font-serif text-lg font-bold mb-2 flex items-center">
+                    <span class="bg-muji-text text-white text-xs px-2 py-1 rounded mr-2 font-sans">Day 2</span>
+                    文化景點與探路
+                </h3>
+                <p class="text-xs text-muji-gray mb-3 border-b border-muji-border pb-2">這天以踩點為主，先認識名產品牌但不急著扛。</p>
+                <div class="space-y-3 text-sm text-muji-text magazine-text">
+                    <p><span class="font-bold block text-muji-red">蝦餅三天王 (先記牌子)：</span></p>
+                    <ul class="list-disc list-inside pl-2 space-y-1 text-xs">
+                        <li>蝦仙貝之里：綜合蝦餅，便宜份量大 (送同事最佳)。</li>
+                        <li>坂角總本舖：蝦餅偏高級，蝦含量高 (送長輩客戶)。</li>
+                        <li>桂新堂：設計感強，常有限定圖案 (送在意外觀的人)。</li>
+                    </ul>
+                    <p><span class="font-bold block text-muji-red mt-2">和菓子老舖：</span></p>
+                    <ul class="list-disc list-inside pl-2 space-y-1 text-xs">
+                        <li>青柳總本家：青蛙饅頭、外郎糕。</li>
+                        <li>兩口屋是清：羊羹、銅鑼燒，包裝穩重。</li>
+                    </ul>
+                    <p><span class="font-bold block mt-2">MUJI (榮)：</span>先看好精油與收納用品款式，Day 5 再集中火力。</p>
+                </div>
+            </div>
+
+            <!-- Day 3 -->
+            <div class="bg-muji-card border border-muji-border rounded shadow-muji p-4">
+                <h3 class="font-serif text-lg font-bold mb-2 flex items-center">
+                    <span class="bg-muji-text text-white text-xs px-2 py-1 rounded mr-2 font-sans">Day 3</span>
+                    大須與服飾採購
+                </h3>
+                <ul class="list-disc list-inside text-sm text-muji-text space-y-2 magazine-text">
+                    <li><span class="font-bold">大須周邊：</span>認識代表性和菓子「大須外郎糕」(口感介於羊羹與年糕之間)。邊走邊吃鯛魚燒與糰子，鎖定想帶回去的款式。</li>
+                    <li><span class="font-bold">UNIQLO & GU：</span>退稅方便且價格便宜，趁這天將當季服飾與科技材質衣物一次補齊，挑好大小款式。</li>
+                </ul>
+            </div>
+
+            <!-- Day 4 -->
+            <div class="bg-muji-card border border-muji-border rounded shadow-muji p-4">
+                <h3 class="font-serif text-lg font-bold mb-2 flex items-center">
+                    <span class="bg-muji-text text-white text-xs px-2 py-1 rounded mr-2 font-sans">Day 4</span>
+                    水族館與超市調料
+                </h3>
+                <p class="text-xs text-muji-gray mb-3 border-b border-muji-border pb-2">以景點為主，購物彈性較小，看到喜歡再下手。</p>
+                <ul class="list-disc list-inside text-sm text-muji-text space-y-2 magazine-text">
+                    <li><span class="font-bold">港區限定：</span>水族館內若有可愛包裝的小餅乾或魚形餅，可當作有故事感的紀念小禮。</li>
+                    <li><span class="font-bold">超市/藥妝補給：</span>瓶裝調味料 (八丁味噌、手羽先醬汁)、即食咖哩包。工程師宅在家煮飯的神器。</li>
+                </ul>
+            </div>
+
+            <!-- Day 5 -->
+            <div class="bg-muji-card border-muji-text border-2 rounded shadow-muji p-4 relative">
+                <div class="absolute -top-3 -right-3 bg-muji-red text-white text-xs font-bold px-2 py-1 rounded shadow transform rotate-6">終極掃貨日</div>
+                <h3 class="font-serif text-lg font-bold mb-2 flex items-center text-muji-red">
+                    <span class="bg-muji-red text-white text-xs px-2 py-1 rounded mr-2 font-sans">Day 5</span>
+                    伴手禮與收納大決戰
+                </h3>
+                <p class="text-xs text-muji-gray mb-3 border-b border-muji-border pb-2">將前幾天看過的品牌全部整合，集中在名古屋站周邊。</p>
+                
+                <div class="space-y-4 text-sm text-muji-text magazine-text">
+                    <div>
+                        <p class="font-bold border-l-4 border-muji-wood pl-2 mb-1">給公司同事 (大量分送)</p>
+                        <p class="text-xs text-muji-gray pl-3">・蝦仙貝之里 綜合蝦餅 (這天可先扛一部份)<br>・Calbee Jagarico 手羽先風味薯條杯</p>
+                    </div>
+                    <div>
+                        <p class="font-bold border-l-4 border-muji-wood pl-2 mb-1">給家人朋友</p>
+                        <p class="text-xs text-muji-gray pl-3">・青柳總本家 青蛙饅頭＋外郎糕禮盒<br>・東海壽 小倉紅豆吐司夾心餅乾 (體驗名古屋味)<br>・小雞蛋糕 / 小雞布丁蛋糕</p>
+                    </div>
+                    <div>
+                        <p class="font-bold border-l-4 border-muji-wood pl-2 mb-1">給長輩與重要客戶</p>
+                        <p class="text-xs text-muji-gray pl-3">・坂角總本舖 蝦餅黃金罐 (高級感)<br>・桂新堂 精緻蝦餅禮盒</p>
+                    </div>
+                    <div class="bg-gray-50 p-2 rounded">
+                        <p class="font-bold text-muji-red text-xs mb-1"><i class="fa-solid fa-box-archive mr-1"></i> 名鐵百貨 MUJI (最大店)</p>
+                        <p class="text-[11px] text-muji-gray">在此買齊超音波香氛噴霧器、單方精油，以及各種壓縮收納袋、整理分隔袋。晚上回飯店用新買的收納袋進行「行李大閱兵」。</p>
                     </div>
                 </div>
             </div>
 
-            <!-- TOYOTA 產業技術紀念館 -->
-            <div class="bg-muji-card border border-muji-border rounded shadow-muji overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1563725357388-132d73357fb6?auto=format&fit=crop&w=600&q=80" alt="工廠機械" class="w-full h-40 object-cover grayscale-[20%]">
-                <div class="p-4">
-                    <h3 class="font-serif text-lg font-bold mb-2">TOYOTA 產業技術紀念館</h3>
-                    <p class="text-sm text-muji-gray magazine-text">
-                        對於追求效率與精度的旅人，這裡是必訪聖地。館內從早期的紡織機械到現代化的汽車組裝線，許多大型機具都會現場實際運作。完美展現了日本工業自動化與製程演進的輝煌歷史。
-                    </p>
-                </div>
-            </div>
-
-            <!-- 大須商店街 -->
+            <!-- Day 6 -->
             <div class="bg-muji-card border border-muji-border rounded shadow-muji p-4">
-                <h3 class="font-serif text-lg font-bold mb-2">大須觀音與商店街</h3>
-                <p class="text-sm text-muji-gray magazine-text">
-                    融合了懷舊與現代、異國與在地，被稱為「日本第一充滿活力的商店街」。除了擁有壯麗的大須觀音寺，這裡也是二手衣、古董、先進電子零件與各國美食的聚集地，展現多元的庶民文化。
-                </p>
-            </div>
-
-            <!-- 名古屋港水族館 -->
-            <div class="bg-muji-card border border-muji-border rounded shadow-muji overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1582967788606-a171c1080cb0?auto=format&fit=crop&w=600&q=80" alt="水族館" class="w-full h-40 object-cover grayscale-[20%]">
-                <div class="p-4">
-                    <h3 class="font-serif text-lg font-bold mb-2">名古屋港水族館：深海藍色療癒</h3>
-                    <p class="text-sm text-muji-gray magazine-text mb-4">
-                        分為南北兩館。北館擁有世界級巨大的表演水槽，能近距離觀賞虎鯨與白鯨；南館的「南極之旅」則以震撼的沙丁魚龍捲風與企鵝展示聞名，是極具視覺張力的海洋生態殿堂。
-                    </p>
-                    <div class="w-full h-[150px] bg-gray-200 rounded overflow-hidden">
-                        <iframe width="100%" height="150" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.openstreetmap.org/export/embed.html?bbox=136.877,35.088,136.883,35.092&amp;layer=mapnik&amp;marker=35.090,136.880"></iframe>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 南極觀測船富士號 -->
-            <div class="bg-muji-card border border-muji-border rounded shadow-muji p-4">
-                <h3 class="font-serif text-lg font-bold mb-2">南極觀測船 富士號</h3>
-                <p class="text-sm text-muji-gray magazine-text">
-                    停泊在名古屋港口的退役破冰船。船內原汁原味保留了精密的航行設備、引擎室以及當年的極地維生系統。對於具備工程背景的旅人來說，其機械結構與極端環境下的生活空間規劃極具參考價值。
-                </p>
-            </div>
-
-            <!-- 熱田神宮 -->
-            <div class="bg-muji-card border border-muji-border rounded shadow-muji p-4">
-                <h3 class="font-serif text-lg font-bold mb-2">熱田神宮：千年神木與莊嚴淨化</h3>
-                <p class="text-sm text-muji-gray magazine-text">
-                    日本三大神宮之一，供奉著三大神器之一的「草薙劍」。漫步於擁有千年神木的森林參道，能徹底感受莊嚴肅穆的氛圍，是洗滌心靈、暫離城市喧囂的絕佳去處。
-                </p>
+                <h3 class="font-serif text-lg font-bold mb-2 flex items-center">
+                    <span class="bg-muji-text text-white text-xs px-2 py-1 rounded mr-2 font-sans">Day 6</span>
+                    機場最後衝刺
+                </h3>
+                <ul class="list-disc list-inside text-sm text-muji-text space-y-2 magazine-text">
+                    <li><span class="font-bold text-muji-red">必買：</span>えびせんべいの里 (蝦仙貝之里) 機場 4 樓，看重量狀況直接一箱扛回去。</li>
+                    <li><span class="font-bold">視重量追加：</span>坂角總本舖、桂新堂若不夠可補。名古屋小姐餅乾、手羽先零食等機場限定包裝，用來填滿行李最後空隙。</li>
+                </ul>
             </div>
         </div>
 
@@ -333,9 +372,9 @@
             <i class="fa-solid fa-map mb-1 text-lg"></i>
             <span class="text-[10px] tracking-wider font-bold">PLAN</span>
         </button>
-        <button @click="currentTab = 'guide'" :class="{'text-muji-text': currentTab === 'guide', 'text-muji-gray/50': currentTab !== 'guide'}" class="flex flex-col items-center justify-center w-full h-full transition">
-            <i class="fa-solid fa-book-open mb-1 text-lg"></i>
-            <span class="text-[10px] tracking-wider font-bold">GUIDE</span>
+        <button @click="currentTab = 'shopping'" :class="{'text-muji-text': currentTab === 'shopping', 'text-muji-gray/50': currentTab !== 'shopping'}" class="flex flex-col items-center justify-center w-full h-full transition">
+            <i class="fa-solid fa-bag-shopping mb-1 text-lg"></i>
+            <span class="text-[10px] tracking-wider font-bold">SHOPPING</span>
         </button>
         <button @click="currentTab = 'wallet'" :class="{'text-muji-text': currentTab === 'wallet', 'text-muji-gray/50': currentTab !== 'wallet'}" class="flex flex-col items-center justify-center w-full h-full transition">
             <i class="fa-solid fa-wallet mb-1 text-lg"></i>
