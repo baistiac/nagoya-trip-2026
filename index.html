@@ -30,7 +30,6 @@
                         'muji-red': '#7F0019',
                         'muji-gray': '#767676',
                         'muji-border': '#E5E5E5',
-                        'muji-wood': '#D4B59E'
                     },
                     fontFamily: {
                         'sans': ['"Noto Sans TC"', 'sans-serif'],
@@ -62,7 +61,7 @@
             <p class="text-xs text-muji-gray tracking-wider mt-1">2026 SUMMER TRIP</p>
         </div>
         <div class="text-right">
-            <span class="text-xs bg-muji-bg px-2 py-1 rounded border border-muji-border text-muji-gray">v1.1</span>
+            <span class="text-xs bg-muji-bg px-2 py-1 rounded border border-muji-border text-muji-gray">v1.2</span>
         </div>
     </header>
 
@@ -71,7 +70,6 @@
         
         <!-- 1. PLAN 行程表 -->
         <div v-show="currentTab === 'plan'" class="space-y-6 animate-fade-in">
-            <!-- 天數選擇 -->
             <div class="flex overflow-x-auto no-scrollbar space-x-3 pb-2">
                 <button v-for="(day, index) in tripDays" :key="index" @click="selectedDay = index"
                      :class="{'bg-muji-text text-white border-muji-text': selectedDay === index, 'bg-white text-muji-gray border-muji-border': selectedDay !== index}"
@@ -83,7 +81,6 @@
 
             <div class="border-l-2 border-muji-border ml-3 space-y-6 pl-4 relative">
                 <div v-for="(item, idx) in currentDayData" :key="item.id" class="relative group">
-                    <!-- 時間軸節點 -->
                     <div class="absolute -left-[23px] top-1 w-3 h-3 rounded-full border-2 border-muji-bg"
                          :class="item.highlight ? 'bg-muji-red' : 'bg-muji-gray'"></div>
                     
@@ -97,7 +94,6 @@
                         <h3 class="font-bold text-base mb-1">{{ item.name }}</h3>
                         <p v-if="item.note" class="text-sm text-muji-gray leading-relaxed mb-3">{{ item.note }}</p>
                         
-                        <!-- 動作按鈕 -->
                         <div class="flex space-x-2 border-t border-muji-border pt-3 mt-2">
                             <button @click="openGoogleMaps(item.name)" class="flex-1 text-xs text-center py-1.5 bg-muji-bg border border-muji-border rounded hover:bg-gray-100 transition">
                                 <i class="fa-solid fa-location-dot mr-1 text-muji-gray"></i> 地圖導航
@@ -115,12 +111,14 @@
         <div v-show="currentTab === 'guide'" class="space-y-6 animate-fade-in">
             <h2 class="text-xl font-serif font-bold text-muji-text border-b border-muji-border pb-2">深度導覽 GUIDE</h2>
             
+            <!-- 名古屋城 -->
             <div class="bg-muji-card border border-muji-border rounded shadow-muji overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1599598425947-3300262b66bf?auto=format&fit=crop&w=600&q=80" alt="Nagoya Castle" class="w-full h-40 object-cover grayscale-[20%]">
+                <img src="https://images.unsplash.com/photo-1599598425947-3300262b66bf?auto=format&fit=crop&w=600&q=80" alt="名古屋城" class="w-full h-40 object-cover grayscale-[20%]">
                 <div class="p-4">
                     <h3 class="font-serif text-lg font-bold mb-2">名古屋城：金之鯱與工藝之巔</h3>
                     <p class="text-sm text-muji-gray magazine-text mb-4">
-                        建於1612年的名古屋城，最著名的標誌即是天守閣上的金鯱。其「本丸御殿」被譽為近代城郭建築的最高傑作，內部充滿絢麗的金箔壁畫與細膩的木雕。這裡不僅是德川家康鞏固權力的象徵，更見證了尾張德川家的繁華。
+                        建於1612年的名古屋城，最著名的標誌即是天守閣上的金鯱。其「本丸御殿」被譽為近代城郭建築的最高傑作，內部充滿絢麗的金箔壁畫與細膩的木雕。這裡不僅是德川家康鞏固權力的象徵，更見證了尾張德川家的繁華。<br><br>
+                        <span class="text-muji-red text-xs">*冷知識：金鯱原本是為了防火的咒符，後來才演變成城主權力的象徵。</span>
                     </p>
                     <div class="w-full h-[150px] bg-gray-200 rounded overflow-hidden">
                         <iframe width="100%" height="150" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.openstreetmap.org/export/embed.html?bbox=136.896,35.182,136.902,35.186&amp;layer=mapnik&amp;marker=35.184,136.899"></iframe>
@@ -128,17 +126,52 @@
                 </div>
             </div>
 
+            <!-- TOYOTA 產業技術紀念館 -->
+            <div class="bg-muji-card border border-muji-border rounded shadow-muji overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1563725357388-132d73357fb6?auto=format&fit=crop&w=600&q=80" alt="工廠機械" class="w-full h-40 object-cover grayscale-[20%]">
+                <div class="p-4">
+                    <h3 class="font-serif text-lg font-bold mb-2">TOYOTA 產業技術紀念館</h3>
+                    <p class="text-sm text-muji-gray magazine-text">
+                        對於追求效率與精度的旅人，這裡是必訪聖地。館內從早期的紡織機械到現代化的汽車組裝線，許多大型機具都會現場實際運作。完美展現了日本工業自動化與製程演進的輝煌歷史。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 大須商店街 -->
             <div class="bg-muji-card border border-muji-border rounded shadow-muji p-4">
-                <h3 class="font-serif text-lg font-bold mb-2">TOYOTA 產業技術紀念館</h3>
+                <h3 class="font-serif text-lg font-bold mb-2">大須觀音與商店街</h3>
                 <p class="text-sm text-muji-gray magazine-text">
-                    這是一個非常有深度的景點。從早期的紡織機械到現代化的汽車組裝線，館內許多大型機具都會現場運作。完美展現了日本工業自動化與製程演進的輝煌歷史。
+                    融合了懷舊與現代、異國與在地，被稱為「日本第一充滿活力的商店街」。除了擁有壯麗的大須觀音寺，這裡也是二手衣、古董、先進電子零件與各國美食的聚集地，展現多元的庶民文化。
                 </p>
             </div>
 
+            <!-- 名古屋港水族館 -->
+            <div class="bg-muji-card border border-muji-border rounded shadow-muji overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1582967788606-a171c1080cb0?auto=format&fit=crop&w=600&q=80" alt="水族館" class="w-full h-40 object-cover grayscale-[20%]">
+                <div class="p-4">
+                    <h3 class="font-serif text-lg font-bold mb-2">名古屋港水族館：深海藍色療癒</h3>
+                    <p class="text-sm text-muji-gray magazine-text mb-4">
+                        分為南北兩館。北館擁有世界級巨大的表演水槽，能近距離觀賞虎鯨與白鯨；南館的「南極之旅」則以震撼的沙丁魚龍捲風與企鵝展示聞名，是極具視覺張力的海洋生態殿堂。
+                    </p>
+                    <div class="w-full h-[150px] bg-gray-200 rounded overflow-hidden">
+                        <iframe width="100%" height="150" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.openstreetmap.org/export/embed.html?bbox=136.877,35.088,136.883,35.092&amp;layer=mapnik&amp;marker=35.090,136.880"></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 南極觀測船富士號 -->
             <div class="bg-muji-card border border-muji-border rounded shadow-muji p-4">
                 <h3 class="font-serif text-lg font-bold mb-2">南極觀測船 富士號</h3>
                 <p class="text-sm text-muji-gray magazine-text">
-                    停泊在名古屋港口的退役破冰船。船內保留了精密的航行設備、引擎室以及當年的極地維生系統，對工程背景的旅人來說，其機械結構與生活空間規劃極具參考價值。
+                    停泊在名古屋港口的退役破冰船。船內原汁原味保留了精密的航行設備、引擎室以及當年的極地維生系統。對於具備工程背景的旅人來說，其機械結構與極端環境下的生活空間規劃極具參考價值。
+                </p>
+            </div>
+
+            <!-- 熱田神宮 -->
+            <div class="bg-muji-card border border-muji-border rounded shadow-muji p-4">
+                <h3 class="font-serif text-lg font-bold mb-2">熱田神宮：千年神木與莊嚴淨化</h3>
+                <p class="text-sm text-muji-gray magazine-text">
+                    日本三大神宮之一，供奉著三大神器之一的「草薙劍」。漫步於擁有千年神木的森林參道，能徹底感受莊嚴肅穆的氛圍，是洗滌心靈、暫離城市喧囂的絕佳去處。
                 </p>
             </div>
         </div>
